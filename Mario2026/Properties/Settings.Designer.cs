@@ -70,5 +70,7 @@ namespace Mario2026.Properties {
                 this["MarioHeight"] = value;
             }
         }
+
+        public bool IsUpgraded { get; internal set; }
     }
 }

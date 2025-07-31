@@ -36,6 +36,7 @@
             VpeToolStripMenuItem = new ToolStripMenuItem();
             AutoPageBreakTestToolStripMenuItem = new ToolStripMenuItem();
             InfoToolStripMenuItem = new ToolStripMenuItem();
+            VsoftToolStripMenuItem = new ToolStripMenuItem();
             PleskToolStripMenuItem = new ToolStripMenuItem();
             HostingToolStripMenuItem = new ToolStripMenuItem();
             WebmailToolStripMenuItem = new ToolStripMenuItem();
@@ -102,57 +103,69 @@
             // InfoToolStripMenuItem
             // 
             InfoToolStripMenuItem.Alignment = ToolStripItemAlignment.Right;
-            InfoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { PleskToolStripMenuItem, toolStripSeparator1, CommandPromptToolStripMenuItem, toolStripSeparator2, UBLValidatorToolStripMenuItem, UBLDocsBillingToolStripMenuItem });
+            InfoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { VsoftToolStripMenuItem, PleskToolStripMenuItem, toolStripSeparator1, CommandPromptToolStripMenuItem, toolStripSeparator2, UBLValidatorToolStripMenuItem, UBLDocsBillingToolStripMenuItem });
             InfoToolStripMenuItem.Name = "InfoToolStripMenuItem";
             InfoToolStripMenuItem.Size = new Size(24, 20);
             InfoToolStripMenuItem.Text = "?";
+            // 
+            // VsoftToolStripMenuItem
+            // 
+            VsoftToolStripMenuItem.Name = "VsoftToolStripMenuItem";
+            VsoftToolStripMenuItem.Size = new Size(180, 22);
+            VsoftToolStripMenuItem.Text = "Vsoft";
+            VsoftToolStripMenuItem.Click += VsoftToolStripMenuItem_Click;
             // 
             // PleskToolStripMenuItem
             // 
             PleskToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { HostingToolStripMenuItem, WebmailToolStripMenuItem });
             PleskToolStripMenuItem.Name = "PleskToolStripMenuItem";
-            PleskToolStripMenuItem.Size = new Size(174, 22);
-            PleskToolStripMenuItem.Text = "Plesk Hosting";
+            PleskToolStripMenuItem.Size = new Size(180, 22);
+            PleskToolStripMenuItem.Text = "Plesk Hosting";            
             // 
             // HostingToolStripMenuItem
             // 
             HostingToolStripMenuItem.Name = "HostingToolStripMenuItem";
-            HostingToolStripMenuItem.Size = new Size(166, 22);
+            HostingToolStripMenuItem.Size = new Size(180, 22);
             HostingToolStripMenuItem.Text = "Obsidian v18.0.65";
+            HostingToolStripMenuItem.Click += HostingToolStripMenuItem_Click;
             // 
             // WebmailToolStripMenuItem
             // 
             WebmailToolStripMenuItem.Name = "WebmailToolStripMenuItem";
-            WebmailToolStripMenuItem.Size = new Size(166, 22);
+            WebmailToolStripMenuItem.Size = new Size(180, 22);
             WebmailToolStripMenuItem.Text = "Webmail rv.be";
+            WebmailToolStripMenuItem.Click += WebmailToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(171, 6);
+            toolStripSeparator1.Size = new Size(177, 6);
             // 
             // CommandPromptToolStripMenuItem
             // 
             CommandPromptToolStripMenuItem.Name = "CommandPromptToolStripMenuItem";
-            CommandPromptToolStripMenuItem.Size = new Size(174, 22);
+            CommandPromptToolStripMenuItem.Size = new Size(180, 22);
             CommandPromptToolStripMenuItem.Text = "Command Prompt";
+            CommandPromptToolStripMenuItem.Click += CommandPromptToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(171, 6);
+            toolStripSeparator2.Size = new Size(177, 6);
             // 
             // UBLValidatorToolStripMenuItem
             // 
             UBLValidatorToolStripMenuItem.Name = "UBLValidatorToolStripMenuItem";
-            UBLValidatorToolStripMenuItem.Size = new Size(174, 22);
+            UBLValidatorToolStripMenuItem.Size = new Size(180, 22);
             UBLValidatorToolStripMenuItem.Text = "UBL Validator";
+            UBLValidatorToolStripMenuItem.Click += UBLValidatorToolStripMenuItem_Click;
             // 
             // UBLDocsBillingToolStripMenuItem
             // 
             UBLDocsBillingToolStripMenuItem.Name = "UBLDocsBillingToolStripMenuItem";
-            UBLDocsBillingToolStripMenuItem.Size = new Size(174, 22);
+            UBLDocsBillingToolStripMenuItem.Size = new Size(180, 22);
             UBLDocsBillingToolStripMenuItem.Text = "Docs Billing 3.0";
+            UBLDocsBillingToolStripMenuItem.Click += UBLDocsBillingToolStripMenuItem_Click;
             // 
             // FormMario
             // 
@@ -163,6 +176,7 @@
             IsMdiContainer = true;
             MainMenuStrip = MarioMenuStrip;
             Name = "FormMario";
+            Text = "Mario";
             FormClosing += FormMario_FormClosing;
             Load += FormMario_Load;
             MarioMenuStrip.ResumeLayout(false);
@@ -189,5 +203,6 @@
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripMenuItem UBLValidatorToolStripMenuItem;
         private ToolStripMenuItem UBLDocsBillingToolStripMenuItem;
+        private ToolStripMenuItem VsoftToolStripMenuItem;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using IDEALSoftware.VpeCommunity;
+using System.Diagnostics;
 
 namespace Mario2026
 {
@@ -8,16 +9,22 @@ namespace Mario2026
         public FormMario()
         {
             InitializeComponent();
-            Text = "Mario2026 - v." + Application.ProductVersion;
-        }        
-
+            Text = "Mario2026";
+        }
         private void CloseAppToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
         }
-
         private void FormMario_Load(object sender, EventArgs e)
         {
+            // Upgrade settings from previous version if needed
+            if (!Properties.Settings.Default.IsUpgraded)
+            {
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default.IsUpgraded = true;
+                Properties.Settings.Default.Save();
+            }
+
             if (Properties.Settings.Default.MarioTop <= 0)
             {
                 this.Width = 816;
@@ -32,7 +39,6 @@ namespace Mario2026
                 this.Height = Properties.Settings.Default.MarioHeight;
             }
         }
-
         private void FormMario_FormClosing(object sender, FormClosingEventArgs e)
         {
             Properties.Settings.Default.MarioTop = this.Top;
@@ -41,7 +47,6 @@ namespace Mario2026
             Properties.Settings.Default.MarioHeight = this.Height;
             Properties.Settings.Default.Save();
         }
-
         private void LookUpsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form lookUpTools = new FormLookUpTools
@@ -50,7 +55,6 @@ namespace Mario2026
             };
             lookUpTools.ShowDialog();
         }
-
         private void CheckUBLDocumentToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form checkUBLDocument = new FormUblDocCheckUp
@@ -59,7 +63,6 @@ namespace Mario2026
             };
             checkUBLDocument.ShowDialog();
         }
-
         private void AutoPageBreakTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // =====================================================================
@@ -148,13 +151,42 @@ namespace Mario2026
             }
         }
 
-        private void DragDropTestToolStripMenuItem_Click(object sender, EventArgs e)
+        private void VsoftToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form dragDropTest = new FormUblDocCheckUp
-            {
-                Owner = this
-            };
-            dragDropTest.ShowDialog();
+            Process.Start(new ProcessStartInfo("https://www.vsoft.be") { UseShellExecute = true });
+        }
+        private void HostingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("https://web24.foxxl.com:8443") { UseShellExecute = true });
+        }
+        private void WebmailToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("https://webmail.rv.be") { UseShellExecute = true });
+        }
+        private void CommandPromptToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string myDocumentsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            Process myDocProcess = new();
+            myDocProcess.StartInfo.FileName = "cmd.exe";
+            myDocProcess.StartInfo.WorkingDirectory = myDocumentsFolderPath;
+            myDocProcess.StartInfo.UseShellExecute = true;
+            myDocProcess.StartInfo.CreateNoWindow = true;
+            myDocProcess.Start();
+
+            // Process myApp = new();
+            // myApp.StartInfo.FileName = "cmd.exe";
+            // myApp.StartInfo.WorkingDirectory = Application.LocalUserAppDataPath; // Use LocalUserAppDataPath for application data
+            // myApp.StartInfo.UseShellExecute = true;
+            // myApp.StartInfo.CreateNoWindow = true;
+            // myApp.Start();
+        }
+        private void UBLValidatorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("https://www.ubl.be/validator") { UseShellExecute = true });
+        }
+        private void UBLDocsBillingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("https://docs.peppol.eu/poacc/billing/3.0/") { UseShellExecute = true });
         }
     }
 }

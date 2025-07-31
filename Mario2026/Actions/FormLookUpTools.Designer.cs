@@ -29,8 +29,6 @@
         private void InitializeComponent()
         {
             TabControlVariousTools = new TabControl();
-            TabReadUblInvoice = new TabPage();
-            ButtonReadinvoice = new Button();
             TabCheckVat = new TabPage();
             LabelVatResponseContent = new Label();
             ButtonVatLookUp = new Button();
@@ -40,14 +38,12 @@
             ButtonLookUpPeppolID = new Button();
             TextBoxPeppolID = new TextBox();
             TabControlVariousTools.SuspendLayout();
-            TabReadUblInvoice.SuspendLayout();
             TabCheckVat.SuspendLayout();
             TabCheckPeppol.SuspendLayout();
             SuspendLayout();
             // 
             // TabControlVariousTools
             // 
-            TabControlVariousTools.Controls.Add(TabReadUblInvoice);
             TabControlVariousTools.Controls.Add(TabCheckVat);
             TabControlVariousTools.Controls.Add(TabCheckPeppol);
             TabControlVariousTools.Dock = DockStyle.Fill;
@@ -56,26 +52,6 @@
             TabControlVariousTools.SelectedIndex = 0;
             TabControlVariousTools.Size = new Size(576, 450);
             TabControlVariousTools.TabIndex = 0;
-            // 
-            // TabReadUblInvoice
-            // 
-            TabReadUblInvoice.Controls.Add(ButtonReadinvoice);
-            TabReadUblInvoice.Location = new Point(4, 24);
-            TabReadUblInvoice.Name = "TabReadUblInvoice";
-            TabReadUblInvoice.Size = new Size(568, 422);
-            TabReadUblInvoice.TabIndex = 2;
-            TabReadUblInvoice.Text = "UBL Factuur/Creditnota";
-            TabReadUblInvoice.UseVisualStyleBackColor = true;
-            // 
-            // ButtonReadinvoice
-            // 
-            ButtonReadinvoice.Location = new Point(8, 8);
-            ButtonReadinvoice.Name = "ButtonReadinvoice";
-            ButtonReadinvoice.Size = new Size(75, 23);
-            ButtonReadinvoice.TabIndex = 0;
-            ButtonReadinvoice.Text = "Inlezen";
-            ButtonReadinvoice.UseVisualStyleBackColor = true;
-            ButtonReadinvoice.Click += ButtonReadinvoice_Click;
             // 
             // TabCheckVat
             // 
@@ -167,7 +143,6 @@
             StartPosition = FormStartPosition.CenterParent;
             Text = "Opzoekingen";
             TabControlVariousTools.ResumeLayout(false);
-            TabReadUblInvoice.ResumeLayout(false);
             TabCheckVat.ResumeLayout(false);
             TabCheckVat.PerformLayout();
             TabCheckPeppol.ResumeLayout(false);
@@ -186,7 +161,5 @@
         private Label LabelPeppolResponseContent;
         private Button ButtonLookUpPeppolID;
         private TextBox TextBoxPeppolID;
-        private TabPage TabReadUblInvoice;
-        private Button ButtonReadinvoice;
     }
 }
