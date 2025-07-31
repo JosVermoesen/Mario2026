@@ -1,4 +1,4 @@
-# marIntegraal
+# Mario 2026
 
 ## [ClickOnce][ClickOnce]
 
