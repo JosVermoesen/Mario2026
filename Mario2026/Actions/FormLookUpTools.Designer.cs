@@ -138,7 +138,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(576, 450);
             Controls.Add(TabControlVariousTools);
-            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             Name = "FormLookUpTools";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Opzoekingen";

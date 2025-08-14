@@ -11,10 +11,6 @@ namespace Mario2026
             InitializeComponent();
             Text = "Mario2026";
         }
-        private void CloseAppToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
         private void FormMario_Load(object sender, EventArgs e)
         {
             // Upgrade settings from previous version if needed
@@ -25,7 +21,7 @@ namespace Mario2026
                 Properties.Settings.Default.Save();
             }
 
-            if (Properties.Settings.Default.MarioTop <= 0)
+            if (Properties.Settings.Default.MarioMainFormTop <= 0)
             {
                 this.Width = 816;
                 this.Height = 489;
@@ -33,20 +29,25 @@ namespace Mario2026
             }
             else
             {
-                this.Top = Properties.Settings.Default.MarioTop;
-                this.Left = Properties.Settings.Default.MarioLeft;
-                this.Width = Properties.Settings.Default.MarioWidth;
-                this.Height = Properties.Settings.Default.MarioHeight;
+                this.Top = Properties.Settings.Default.MarioMainFormTop;
+                this.Left = Properties.Settings.Default.MarioMainFormLeft;
+                this.Width = Properties.Settings.Default.MarioMainFormWidth;
+                this.Height = Properties.Settings.Default.MarioMainFormHeight;
             }
         }
         private void FormMario_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Properties.Settings.Default.MarioTop = this.Top;
-            Properties.Settings.Default.MarioLeft = this.Left;
-            Properties.Settings.Default.MarioWidth = this.Width;
-            Properties.Settings.Default.MarioHeight = this.Height;
+            Properties.Settings.Default.MarioMainFormTop = this.Top;
+            Properties.Settings.Default.MarioMainFormLeft = this.Left;
+            Properties.Settings.Default.MarioMainFormWidth = this.Width;
+            Properties.Settings.Default.MarioMainFormHeight = this.Height;
             Properties.Settings.Default.Save();
         }
+        private void CloseAppToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
         private void LookUpsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form lookUpTools = new FormLookUpTools
@@ -187,6 +188,24 @@ namespace Mario2026
         private void UBLDocsBillingToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start(new ProcessStartInfo("https://docs.peppol.eu/poacc/billing/3.0/") { UseShellExecute = true });
+        }
+
+        private void TestingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form ademicoTesting = new FormAdemicoTesting
+            {
+                Owner = this
+            };
+            ademicoTesting.ShowDialog();
+        }
+
+        private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form settingsForm = new FormAdemicoSettings 
+            {
+                Owner = this
+            };
+            settingsForm.ShowDialog();
         }
     }
 }

@@ -16,7 +16,8 @@ namespace Mario2026.Properties {
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-        
+        internal bool IsUpgraded;
+
         public static Settings Default {
             get {
                 return defaultInstance;
@@ -26,51 +27,97 @@ namespace Mario2026.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int MarioTop {
+        public int MarioMainFormTop {
             get {
-                return ((int)(this["MarioTop"]));
+                return ((int)(this["MarioMainFormTop"]));
             }
             set {
-                this["MarioTop"] = value;
+                this["MarioMainFormTop"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int MarioLeft {
+        public int MarioMainFormLeft {
             get {
-                return ((int)(this["MarioLeft"]));
+                return ((int)(this["MarioMainFormLeft"]));
             }
             set {
-                this["MarioLeft"] = value;
+                this["MarioMainFormLeft"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int MarioWidth {
+        public int MarioMainFormWidth {
             get {
-                return ((int)(this["MarioWidth"]));
+                return ((int)(this["MarioMainFormWidth"]));
             }
             set {
-                this["MarioWidth"] = value;
+                this["MarioMainFormWidth"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int MarioHeight {
+        public int MarioMainFormHeight {
             get {
-                return ((int)(this["MarioHeight"]));
+                return ((int)(this["MarioMainFormHeight"]));
             }
             set {
-                this["MarioHeight"] = value;
+                this["MarioMainFormHeight"] = value;
             }
         }
-
-        public bool IsUpgraded { get; internal set; }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AdemicoUrl {
+            get {
+                return ((string)(this["AdemicoUrl"]));
+            }
+            set {
+                this["AdemicoUrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AdemicoAccessToken {
+            get {
+                return ((string)(this["AdemicoAccessToken"]));
+            }
+            set {
+                this["AdemicoAccessToken"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AdemicoUsername {
+            get {
+                return ((string)(this["AdemicoUsername"]));
+            }
+            set {
+                this["AdemicoUsername"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AdemicoPassword {
+            get {
+                return ((string)(this["AdemicoPassword"]));
+            }
+            set {
+                this["AdemicoPassword"] = value;
+            }
+        }
     }
 }

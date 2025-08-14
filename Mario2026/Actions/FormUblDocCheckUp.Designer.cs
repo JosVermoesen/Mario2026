@@ -101,6 +101,7 @@
             Controls.Add(LabelInvoiceId);
             Controls.Add(label1);
             Controls.Add(LabelFile);
+            FormBorderStyle = FormBorderStyle.Fixed3D;
             Name = "FormUblDocCheckUp";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Form1";
