@@ -23,7 +23,7 @@
             Properties.Settings.Default.AdemicoAccessToken = TextBoxAccessToken.Text;
             Properties.Settings.Default.AdemicoUsername = TextBoxUsername.Text;
             Properties.Settings.Default.AdemicoPassword = TextBoxPassword.Text;
-            
+
             Properties.Settings.Default.Save(); // Save the settings to the config file
             MessageBox.Show("Settings saved with data provided!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Close(); // Close the settings form after saving
