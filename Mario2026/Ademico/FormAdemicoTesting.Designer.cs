@@ -36,6 +36,7 @@
             LabelResult = new Label();
             StatusStrip = new StatusStrip();
             ToolStripStatusLabel = new ToolStripStatusLabel();
+            ButtonEntityNew = new Button();
             TabControlVariousTools.SuspendLayout();
             TabActions.SuspendLayout();
             TabResponse.SuspendLayout();
@@ -55,6 +56,7 @@
             // 
             // TabActions
             // 
+            TabActions.Controls.Add(ButtonEntityNew);
             TabActions.Controls.Add(ButtonGetPeppolRegistrations);
             TabActions.Controls.Add(ButtonCheckConnectivity);
             TabActions.Location = new Point(4, 24);
@@ -118,6 +120,16 @@
             ToolStripStatusLabel.Size = new Size(39, 17);
             ToolStripStatusLabel.Text = "Ready";
             // 
+            // ButtonEntityNew
+            // 
+            ButtonEntityNew.Location = new Point(8, 45);
+            ButtonEntityNew.Name = "ButtonEntityNew";
+            ButtonEntityNew.Size = new Size(122, 23);
+            ButtonEntityNew.TabIndex = 4;
+            ButtonEntityNew.Text = "Register New Entity";
+            ButtonEntityNew.UseVisualStyleBackColor = true;
+            ButtonEntityNew.Click += ButtonEntityNew_Click;
+            // 
             // FormAdemicoTesting
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -146,5 +158,6 @@
         private Label LabelResult;
         private StatusStrip StatusStrip;
         private ToolStripStatusLabel ToolStripStatusLabel;
+        private Button ButtonEntityNew;
     }
 }

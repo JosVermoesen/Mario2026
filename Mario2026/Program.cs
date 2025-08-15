@@ -1,5 +1,3 @@
-using System.Globalization;
-
 namespace Mario2026
 {
     internal static class Program

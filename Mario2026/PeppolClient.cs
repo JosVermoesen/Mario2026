@@ -1,6 +1,8 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Mario2026
 {
@@ -109,6 +111,54 @@ namespace Mario2026
                 return $"Error: {ex.Message}";
             }
         }
+
+        public sealed record ApiResult(HttpStatusCode StatusCode, string? ResponseBody);
+        /// <summary>
+        /// POST {{ademicoUrl}}/api/peppol/v1/legal-entities?accessToken={{ademicoAccessToken}}
+        /// Creates/registers a legal entity in the Peppol network using Basic authentication.
+        /// </summary>
+        public static async Task<ApiResult> CreateOrRegisterLegalEntityAsync(
+            CreateLegalEntityRequest request,
+            CancellationToken cancellationToken = default)
+        {
+            // if (request is null) throw new ArgumentNullException(nameof(request));
+
+            string ademicoUrl = Properties.Settings.Default.AdemicoUrl;
+            string accessToken = Properties.Settings.Default.AdemicoAccessToken;
+            string username = Properties.Settings.Default.AdemicoUsername;
+            string password = Properties.Settings.Default.AdemicoPassword;
+
+            var baseUrl = ademicoUrl.TrimEnd('/');
+            var requestUri = $"{baseUrl}/api/peppol/v1/legal-entities?accessToken={Uri.EscapeDataString(accessToken)}";
+
+            var jsonOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                WriteIndented = false
+            };
+
+            using var http = new HttpClient();
+
+            // Basic auth
+            var credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}"));
+            http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
+
+            // Accept JSON
+            http.DefaultRequestHeaders.Accept.Clear();
+            http.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var json = JsonSerializer.Serialize(request, jsonOptions);
+            using var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            using var response = await http.PostAsync(requestUri, content, cancellationToken).ConfigureAwait(false);
+            var body = response.Content is null
+                ? null
+                : await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+
+            return new ApiResult(response.StatusCode, body);
+        }
+
     }
 }
 
