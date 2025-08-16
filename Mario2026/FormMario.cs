@@ -12,15 +12,7 @@ namespace Mario2026
             Text = "Mario2026";
         }
         private void FormMario_Load(object sender, EventArgs e)
-        {
-            // Upgrade settings from previous version if needed
-            if (!Properties.Settings.Default.IsUpgraded)
-            {
-                Properties.Settings.Default.Upgrade();
-                Properties.Settings.Default.IsUpgraded = true;
-                Properties.Settings.Default.Save();
-            }
-
+        {            
             if (Properties.Settings.Default.MarioMainFormTop <= 0)
             {
                 this.Width = 816;

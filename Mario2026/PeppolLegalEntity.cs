@@ -1,5 +1,31 @@
 ﻿namespace Mario2026
 {
+    public class ViesApproximate
+    {   public string? Name { get; set; }
+        public string? Street { get; set; }
+        public string? PostalCode { get; set; }
+        public string? City { get; set; }
+        public string? CompanyType { get; set; }
+        public int MatchName { get; set; }
+        public int MatchStreet { get; set; }
+        public int MatchPostalCode { get; set; }
+        public int MatchCity { get; set; }
+        public int MatchCompanyType { get; set; }
+    }
+
+    public class VatResponse
+    {
+        public bool IsValid { get; set; } = false;
+        public DateTime RequestDate { get; set; }
+        public string? UserError { get; set; }
+        public string? Name { get; set; }
+        public string? Address { get; set; }
+        public string? RequestIdentifier { get; set; }
+        public string? OriginalVatNumber { get; set; }
+        public string? VatNumber { get; set; }
+        public ViesApproximate? ViesApproximate { get; set; }
+    }
+
     public sealed class CreateLegalEntityRequest
     {
         public LegalEntityDetails LegalEntityDetails { get; set; } = new();
@@ -28,14 +54,15 @@
     public sealed class PeppolRegistrationX
     {
         public PeppolIdentifier PeppolIdentifier { get; set; } = new();
-        public List<string> SupportedDocuments { get; set; } = [];
+        public List<string> SupportedDocuments { get; set; } = []; // e.g., ["PEPPOL_BIS_BILLING_UBL_INVOICE_V3"]
+
         public bool PeppolRegistration { get; set; }
     }
 
     public sealed class PeppolIdentifier
     {
-        public string? Scheme { get; set; }      // e.g., "0208"
-        public string? Identifier { get; set; }  // e.g., "0430094832"
+        public string? Scheme { get; set; } // e.g., "0208" for Belgian VAT 
+        public string? Identifier { get; set; } // e.g., "0885799743" as a VAT number
     }
 
 }

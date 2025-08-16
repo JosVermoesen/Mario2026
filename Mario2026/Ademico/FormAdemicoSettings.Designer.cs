@@ -37,13 +37,14 @@
             label3 = new Label();
             TextBoxPassword = new TextBox();
             ButtonSaveSettings = new Button();
+            ButtonClose = new Button();
             SuspendLayout();
             // 
             // TextBoxUrl
             // 
             TextBoxUrl.Location = new Point(99, 12);
             TextBoxUrl.Name = "TextBoxUrl";
-            TextBoxUrl.Size = new Size(447, 23);
+            TextBoxUrl.Size = new Size(361, 23);
             TextBoxUrl.TabIndex = 0;
             // 
             // LabelUrl
@@ -66,7 +67,7 @@
             // 
             TextBoxAccessToken.Location = new Point(99, 41);
             TextBoxAccessToken.Name = "TextBoxAccessToken";
-            TextBoxAccessToken.Size = new Size(447, 23);
+            TextBoxAccessToken.Size = new Size(361, 23);
             TextBoxAccessToken.TabIndex = 2;
             // 
             // label2
@@ -81,7 +82,7 @@
             // 
             TextBoxUsername.Location = new Point(99, 70);
             TextBoxUsername.Name = "TextBoxUsername";
-            TextBoxUsername.Size = new Size(447, 23);
+            TextBoxUsername.Size = new Size(361, 23);
             TextBoxUsername.TabIndex = 4;
             // 
             // label3
@@ -96,12 +97,12 @@
             // 
             TextBoxPassword.Location = new Point(99, 99);
             TextBoxPassword.Name = "TextBoxPassword";
-            TextBoxPassword.Size = new Size(447, 23);
+            TextBoxPassword.Size = new Size(361, 23);
             TextBoxPassword.TabIndex = 6;
             // 
             // ButtonSaveSettings
             // 
-            ButtonSaveSettings.Location = new Point(471, 139);
+            ButtonSaveSettings.Location = new Point(99, 128);
             ButtonSaveSettings.Name = "ButtonSaveSettings";
             ButtonSaveSettings.Size = new Size(75, 23);
             ButtonSaveSettings.TabIndex = 8;
@@ -109,11 +110,23 @@
             ButtonSaveSettings.UseVisualStyleBackColor = true;
             ButtonSaveSettings.Click += ButtonSaveSettings_Click;
             // 
+            // ButtonClose
+            // 
+            ButtonClose.Location = new Point(385, 128);
+            ButtonClose.Name = "ButtonClose";
+            ButtonClose.Size = new Size(75, 23);
+            ButtonClose.TabIndex = 9;
+            ButtonClose.Text = "Sluiten";
+            ButtonClose.UseVisualStyleBackColor = true;
+            ButtonClose.Click += ButtonClose_Click;
+            // 
             // FormAdemicoSettings
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(637, 185);
+            CancelButton = ButtonClose;
+            ClientSize = new Size(476, 159);
+            Controls.Add(ButtonClose);
             Controls.Add(ButtonSaveSettings);
             Controls.Add(label3);
             Controls.Add(TextBoxPassword);
@@ -143,5 +156,6 @@
         private Label label3;
         private TextBox TextBoxPassword;
         private Button ButtonSaveSettings;
+        private Button ButtonClose;
     }
 }

@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+﻿using Newtonsoft.Json;
+using System.Globalization;
 
 namespace Mario2026
 {
     public partial class FormAdemicoTesting : Form
     {
-
+        private readonly HttpClient httpCheck;
         public FormAdemicoTesting()
         {
             InitializeComponent();
+            httpCheck = new HttpClient(); // Initialize HttpClient instance                        
         }
 
         async private void ButtonCheckConnectivity_Click(object sender, EventArgs e)
@@ -53,7 +46,7 @@ namespace Mario2026
 
                 if (respons.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    ToolStripStatusLabel.Text = "Registration found (200).";
+                    ToolStripStatusLabel.Text = "Registration(s) found (200).";
                 }
                 else if (respons.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
@@ -103,21 +96,21 @@ namespace Mario2026
                 LegalEntityDetails = new LegalEntityDetails
                 {
                     PublishInPeppolDirectory = true,
-                    Name = "Erika Callebaut",
+                    Name = TextBoxCompanyName.Text,
                     CountryCode = "BE",
-                    GeographicalInformation = "Schroverstraat 102, 9310 Aalst",
+                    GeographicalInformation = TextBoxGeographicalInformation.Text,
                     WebsiteURL = "",
                     Contacts =
                     {
                         new Contact
                         {
                             ContactType = "public",
-                            Name = "Callebaut Erika",
-                            PhoneNumber = "+32 53225925",
-                            Email = "erika@telenet.be"
+                            Name = "Vsoft Support",
+                            PhoneNumber = "",
+                            Email = "support@vsoft.be"
                         }
                     },
-                    AdditionalInformation = "Wij zijn gespecialiseerd in huishoudhulp"
+                    AdditionalInformation = ""
                 },
 
                 PeppolRegistrations =
@@ -127,7 +120,7 @@ namespace Mario2026
                         PeppolIdentifier = new PeppolIdentifier
                         {
                             Scheme = "0208",
-                            Identifier = "0885799743"
+                            Identifier = TextBoxIdentifier.Text
                         },
                     SupportedDocuments =
                     {
@@ -145,6 +138,84 @@ namespace Mario2026
 
             ToolStripStatusLabel.Text = $"Status: {(int)result.StatusCode} {result.StatusCode}";
             MessageBox.Show($"Response: {result.ResponseBody}", "Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            ButtonEntityNew.Enabled = false; // Disable the button after creating the entity
+            TextBoxCompanyName .Clear();
+            TextBoxGeographicalInformation.Clear();
         }
+
+        private void ButtonClose_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        async private void ButtonLookUp_Click(object sender, EventArgs e)
+        {
+            if (TextBoxIdentifier.Text.Length == 12)
+            {
+                ToolStripStatusLabel.Text = "Bezig...";
+
+                string vatNumber = TextBoxIdentifier.Text;
+                string countryCode = vatNumber[..2];
+                string vat = vatNumber[2..];
+
+                string url = "https://ec.europa.eu/taxation_customs/vies/rest-api/ms/" + countryCode + "/vat/" + vat;
+
+                try
+                {
+                    HttpResponseMessage response = await httpCheck.GetAsync(url); // Use the HttpClient instance
+                    response.EnsureSuccessStatusCode(); // Throws if not successful
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    LabelResult.Text = responseContent;
+
+                    // Deserialize into VatResponse object
+                    VatResponse? data = JsonConvert.DeserializeObject<VatResponse>(responseContent);
+
+                    // Access fields
+                    if (data != null)
+                    {
+                        string? address = data.Address;
+
+                        if (data?.IsValid == true)
+                        {                            
+                            TextBoxCompanyName.Text = ToTitleCase(data.Name ?? string.Empty);
+                            TextBoxGeographicalInformation.Text = address?.Replace("\n", " - ");
+
+                            ToolStripStatusLabel.Text = "VAT number is valid.";
+                            ButtonEntityNew.Enabled = true; // Enable the button if data is found
+                        }
+                        else
+                        {
+                            TextBoxCompanyName.Clear();
+                            TextBoxGeographicalInformation.Clear();
+
+                            ToolStripStatusLabel.Text = "VAT number is not valid.";
+                            ButtonEntityNew.Enabled = false; // Disable the button if no data is found
+                        }
+                        //LabelResult.Text = $"Name: {data.Name}\nAddress: {address}\nRequest Date: {data.RequestDate}\nRequest Identifier: {data.RequestIdentifier}\nOriginal VAT Number: {data.OriginalVatNumber}\nVAT Number: {data.VatNumber}";
+                        //if (data.ViesApproximate != null)
+                        //{
+                        //    LabelResult.Text += $"\nApproximate Match:\nName: {data.ViesApproximate.Name}\nStreet: {data.ViesApproximate.Street}\nPostal Code: {data.ViesApproximate.PostalCode}\nCity: {data.ViesApproximate.City}\nCompany Type: {data.ViesApproximate.CompanyType}";
+                        //}                    
+                    }
+                }
+                catch (HttpRequestException ex)
+                {
+                    ToolStripStatusLabel.Text = "Error: " + ex.Message;
+                }
+            }
+        }
+
+        public static string ToTitleCase(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return input;
+
+            // step 1: bring everything to lowercase
+            var lower = input.ToLower(CultureInfo.CurrentCulture);
+
+            // step 2: capitalize the first letter of each word
+            var textInfo = CultureInfo.CurrentCulture.TextInfo;
+            return textInfo.ToTitleCase(lower);
+        }        
     }
 }

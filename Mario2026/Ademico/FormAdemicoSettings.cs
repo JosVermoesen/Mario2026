@@ -28,5 +28,10 @@
             MessageBox.Show("Settings saved with data provided!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Close(); // Close the settings form after saving
         }
+
+        private void ButtonClose_Click(object sender, EventArgs e)
+        {
+            Close(); // Close the settings form without saving
+        }
     }
 }

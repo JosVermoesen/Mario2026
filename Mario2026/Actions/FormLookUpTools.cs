@@ -11,21 +11,6 @@ namespace Mario2026
             InitializeComponent();
             httpCheck = new HttpClient(); // Initialize HttpClient instance                        
         }
-        async private void ButtonVatLookUp_Click(object sender, EventArgs e)
-        {
-            string vatNumber = TextBoxVatNumber.Text;
-            string countryCode = vatNumber[..2];
-            string vat = vatNumber[2..];
-
-            LabelVatResponseContent.Text = "Bezig...";
-
-            string url = "https://ec.europa.eu/taxation_customs/vies/rest-api/ms/" + countryCode + "/vat/" + vat;
-
-            HttpResponseMessage response = await httpCheck.GetAsync(url); // Use the HttpClient instance
-            string responseContent = await response.Content.ReadAsStringAsync();
-
-            LabelVatResponseContent.Text = responseContent;
-        }
         async private void ButtonLookUpPeppolID_Click(object sender, EventArgs e)
         {
             try
@@ -59,9 +44,11 @@ namespace Mario2026
 
             // Check in batch of till 25 VAT numbers at once
             // https://app.peppolchecker.eu/
+        }
 
-
-
+        private void ButtonClose_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }
