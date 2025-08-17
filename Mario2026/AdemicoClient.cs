@@ -6,8 +6,58 @@ using System.Text.Json.Serialization;
 
 namespace Mario2026
 {
-    public static class PeppolClient
+    public static class AdemicoClient
     {
+        public static async Task<string> GetNotificationsAsync(
+            string transmissionId, string documentId, string eventType, string peppolDocumentType, string sender,
+            string receiver, string startDateTime, string endDateTime, string page, string pageSize,
+            CancellationToken cancellationToken = default)
+        {
+            string ademicoUrl = Properties.Settings.Default.AdemicoUrl;
+            string accessToken = Properties.Settings.Default.AdemicoAccessToken;
+            string username = Properties.Settings.Default.AdemicoUsername;
+            string password = Properties.Settings.Default.AdemicoPassword;
+
+            if (string.IsNullOrWhiteSpace(ademicoUrl))
+                throw new ArgumentException("Base URL is required.", nameof(ademicoUrl));
+
+            // Helper to URL-encode query parameters safely
+            static string Encode(string val) => Uri.EscapeDataString(val ?? string.Empty);
+
+            // Build query parameters dynamically (skip null/empty)
+            var queryParams = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(transmissionId)) queryParams.Add($"transmissionId={Encode(transmissionId)}");
+            if (!string.IsNullOrWhiteSpace(documentId)) queryParams.Add($"documentId={Encode(documentId)}");
+            if (!string.IsNullOrWhiteSpace(eventType)) queryParams.Add($"eventType={Encode(eventType)}");
+            if (!string.IsNullOrWhiteSpace(peppolDocumentType)) queryParams.Add($"peppolDocumentType={Encode(peppolDocumentType)}");
+            if (!string.IsNullOrWhiteSpace(sender)) queryParams.Add($"sender={Encode(sender)}");
+            if (!string.IsNullOrWhiteSpace(receiver)) queryParams.Add($"receiver={Encode(receiver)}");
+            if (!string.IsNullOrWhiteSpace(startDateTime)) queryParams.Add($"startDateTime={Encode(startDateTime)}");
+            if (!string.IsNullOrWhiteSpace(endDateTime)) queryParams.Add($"endDateTime={Encode(endDateTime)}");
+            if (!string.IsNullOrWhiteSpace(page)) queryParams.Add($"page={Encode(page)}");
+            if (!string.IsNullOrWhiteSpace(pageSize)) queryParams.Add($"pageSize={Encode(pageSize)}");
+            if (!string.IsNullOrWhiteSpace(accessToken)) queryParams.Add($"accessToken={Encode(accessToken)}");
+
+            var fullUrl = $"{ademicoUrl.TrimEnd('/')}/api/peppol/v1/notifications";
+            if (queryParams.Count > 0)
+                fullUrl += "?" + string.Join("&", queryParams);
+
+            // Build HttpClient & request
+            using var httpClient = new HttpClient();
+
+            var authValue = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}"));
+            using var request = new HttpRequestMessage(HttpMethod.Get, fullUrl);
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            request.Headers.Authorization = new AuthenticationHeaderValue("Basic", authValue);
+
+            // Send and read response
+            using var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsStringAsync(cancellationToken);
+        }
+
         public sealed record LegalEntityResult(HttpStatusCode StatusCode, string? ResponseBody);
         /// <summary>
         /// Calls GET {{ademicoUrl}}/api/peppol/v1/legal-entities with Basic authentication and query params.
@@ -19,15 +69,14 @@ namespace Mario2026
         /// <param name="peppolRegistrationScheme">Peppol identifier scheme (e.g., "0208")</param>
         /// <param name="peppolRegistrationIdentifier">Peppol identifier (e.g., "0440058217")</param>
         /// <param name="peppolSupportedDocument">Supported document (e.g., "PEPPOL_BIS_BILLING_UBL_INVOICE_V3")</param>
+        /// <param name="legalEntityId">Unique legal entity ID (optional)</param>
         /// <param name="accessToken">Access token (query parameter)</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>HTTP status code and raw response body</returns>
         public static async Task<LegalEntityResult> GetPeppolRegistrationAsync(
-                string? country,
-                string? peppolRegistrationScheme,
-                string? peppolRegistrationIdentifier,
-                string? peppolSupportedDocument,
-            CancellationToken cancellationToken = default)
+                string? country, string? peppolRegistrationScheme, string? peppolRegistrationIdentifier,
+                string? peppolSupportedDocument, string? legalEntityId,
+                CancellationToken cancellationToken = default)
         {
             string ademicoUrl = Properties.Settings.Default.AdemicoUrl;
             string accessToken = Properties.Settings.Default.AdemicoAccessToken;
@@ -43,6 +92,7 @@ namespace Mario2026
                 ["peppolRegistrationScheme"] = peppolRegistrationScheme ?? throw new ArgumentNullException(nameof(peppolRegistrationScheme)),
                 ["peppolRegistrationIdentifier"] = peppolRegistrationIdentifier ?? throw new ArgumentNullException(nameof(peppolRegistrationIdentifier)),
                 ["peppolSupportedDocument"] = peppolSupportedDocument ?? throw new ArgumentNullException(nameof(peppolSupportedDocument)),
+                ["legalEntityId"] = legalEntityId ?? throw new ArgumentNullException(nameof(legalEntityId)),
                 ["accessToken"] = accessToken
             };
             string queryString = await new FormUrlEncodedContent(query).ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
@@ -111,7 +161,6 @@ namespace Mario2026
                 return $"Error: {ex.Message}";
             }
         }
-
         public sealed record ApiResult(HttpStatusCode StatusCode, string? ResponseBody);
         /// <summary>
         /// POST {{ademicoUrl}}/api/peppol/v1/legal-entities?accessToken={{ademicoAccessToken}}

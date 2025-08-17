@@ -15,7 +15,7 @@ namespace Mario2026
         async private void ButtonCheckConnectivity_Click(object sender, EventArgs e)
         {
             ToolStripStatusLabel.Text = "Bezig...";
-            var response = await PeppolClient.CheckConnection(new HttpClient());
+            var response = await AdemicoClient.CheckConnection(new HttpClient());
             if (response != null)
             {
                 ToolStripStatusLabel.Text = response;
@@ -29,20 +29,21 @@ namespace Mario2026
 
         async private void ButtonGetPeppolRegistrations_Click(object sender, EventArgs e)
         {
-            // Example usage in a WinForms/WPF/Console app
             ToolStripStatusLabel.Text = "Bezig...";
-            string country = "BE"; // Example country code
-            string peppolRegistrationScheme = ""; // Example scheme code, e.g., "0208"
-            string peppolRegistrationIdentifier = ""; // Example identifier, e.g., "0440058217"
-            string peppolSupportedDocument = ""; // Example supported document, e.g., "PEPPOL_BIS_BILLING_UBL_INVOICE_V3"
+            string country = TextBoxCountryCode.Text; // Example country code
+            string peppolRegistrationScheme = TextBoxRegScheme.Text; // Example scheme code, e.g., "0208"
+            string peppolRegistrationIdentifier = TextBoxRegIdentifier.Text; // Example identifier, e.g., "0529835180"
+            string peppolSupportedDocument = TextBoxSupportedDocument.Text; // Example supported document, e.g., "PEPPOL_BIS_BILLING_UBL_INVOICE_V3"
+            string legalEntityId = TextBoxLegalEntityId.Text; // Example legal entity ID, if needed
 
             try
             {
-                var respons = await PeppolClient.GetPeppolRegistrationAsync(
+                var respons = await AdemicoClient.GetPeppolRegistrationAsync(
                     country,
                     peppolRegistrationScheme,
                     peppolRegistrationIdentifier,
-                    peppolSupportedDocument);
+                    peppolSupportedDocument,
+                    legalEntityId);
 
                 if (respons.StatusCode == System.Net.HttpStatusCode.OK)
                 {
@@ -61,7 +62,15 @@ namespace Mario2026
                     ToolStripStatusLabel.Text = $"Status: {(int)respons.StatusCode} {respons.StatusCode}";
                 }
 
-                LabelResult.Text = "Response body:\n" + respons.ResponseBody;
+                if (!string.IsNullOrEmpty(respons.ResponseBody))
+                {
+                    var deserializedString = JsonConvert.DeserializeObject(respons.ResponseBody);
+                    RichTextBoxResult.Text = JsonConvert.SerializeObject(deserializedString, Formatting.Indented);
+                }
+                else
+                {
+                    RichTextBoxResult.Text = "No response body.";
+                }
             }
             catch (Exception ex)
             {
@@ -134,12 +143,12 @@ namespace Mario2026
             }
             };
 
-            var result = await PeppolClient.CreateOrRegisterLegalEntityAsync(request: req);
+            var result = await AdemicoClient.CreateOrRegisterLegalEntityAsync(request: req);
 
             ToolStripStatusLabel.Text = $"Status: {(int)result.StatusCode} {result.StatusCode}";
             MessageBox.Show($"Response: {result.ResponseBody}", "Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
             ButtonEntityNew.Enabled = false; // Disable the button after creating the entity
-            TextBoxCompanyName .Clear();
+            TextBoxCompanyName.Clear();
             TextBoxGeographicalInformation.Clear();
         }
 
@@ -165,7 +174,10 @@ namespace Mario2026
                     HttpResponseMessage response = await httpCheck.GetAsync(url); // Use the HttpClient instance
                     response.EnsureSuccessStatusCode(); // Throws if not successful
                     string responseContent = await response.Content.ReadAsStringAsync();
-                    LabelResult.Text = responseContent;
+                    // LabelResult.Text = responseContent;
+                    var deserializedString = JsonConvert.DeserializeObject(responseContent);
+                    RichTextBoxResult.Text = JsonConvert.SerializeObject(deserializedString, Formatting.Indented);
+
 
                     // Deserialize into VatResponse object
                     VatResponse? data = JsonConvert.DeserializeObject<VatResponse>(responseContent);
@@ -176,7 +188,7 @@ namespace Mario2026
                         string? address = data.Address;
 
                         if (data?.IsValid == true)
-                        {                            
+                        {
                             TextBoxCompanyName.Text = ToTitleCase(data.Name ?? string.Empty);
                             TextBoxGeographicalInformation.Text = address?.Replace("\n", " - ");
 
@@ -216,6 +228,35 @@ namespace Mario2026
             // step 2: capitalize the first letter of each word
             var textInfo = CultureInfo.CurrentCulture.TextInfo;
             return textInfo.ToTitleCase(lower);
-        }        
+        }
+
+        async private void ButtonNotifications_Click(object sender, EventArgs e)
+        {
+            ToolStripStatusLabel.Text = "Bezig...";
+            var jsonResponse = await AdemicoClient.GetNotificationsAsync(
+                transmissionId: "", // "f8a591c77b2211f0b1ed0af13d778bd4"
+                documentId: "test-31",
+                eventType: "", // "INVOICE_RESPONSE_RECEIVED"
+                peppolDocumentType: "", // "INVOICE"
+                sender: "9925:BE0440058217",
+                receiver: "0208:0440058217",
+                startDateTime: "", // "2023-07-25T11:03:26.688Z"
+                endDateTime: "", // "2023-07-29T11:03:26.688Z"
+                page: "",
+                pageSize: ""
+            );
+                        
+            if (jsonResponse != null)
+            {
+                ToolStripStatusLabel.Text = "Notifications retrieved successfully.";
+                var deserializedString = JsonConvert.DeserializeObject(jsonResponse);
+                RichTextBoxResult.Text = JsonConvert.SerializeObject(deserializedString, Formatting.Indented);                
+            }
+            else
+            {
+                ToolStripStatusLabel.Text = "Failed to retrieve notifications.";
+                RichTextBoxResult.Text = "";
+            }
+        }
     }
 }
