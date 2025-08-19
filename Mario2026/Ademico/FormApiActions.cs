@@ -8,16 +8,18 @@ namespace Mario2026
 {
     public partial class FormApiActions : Form
     {
-        public Form FormResultPopUp { get; set; }
         private readonly HttpClient httpCheck;
-
+        public Form FormResultPopUp { get; set; }
+        public Form FormDataGridJsonPopUp { get; set; }
+        
         public FormApiActions()
         {
             InitializeComponent();
-            FormResultPopUp = new FormResultPopUp { };
-
             httpCheck = new HttpClient(); // Initialize HttpClient instance
 
+            FormResultPopUp = new FormResultPopUp { };
+            FormDataGridJsonPopUp = new FormDataGridJsonPopUp { };
+            
             // Ensure events are hooked up if you didn't use the Designer
             this.DragEnter += TabInvoiceSend_DragEnter;
             this.DragDrop += TabInvoiceSend_DragDrop;
@@ -138,7 +140,7 @@ namespace Mario2026
             else
             {
                 // Disable the fields for received documents
-                TextBoxSender.Enabled = true;                
+                TextBoxSender.Enabled = true;
                 TextBoxSender.Text = "9925:BE0440058217"; // Default sender for sent documents
                 TextBoxReceiver.Enabled = false;
                 TextBoxReceiver.Text = "";
@@ -148,20 +150,8 @@ namespace Mario2026
         async private void ButtonNotifications_Click(object sender, EventArgs e)
         {
             ToolStripStatusLabel.Text = "Bezig...";
-            //var jsonResponse = await AdemicoClient.GetNotificationsAsync(
-            //    transmissionId: "", // "f8a591c77b2211f0b1ed0af13d778bd4"
-            //    documentId: "",
-            //    eventType: "", // "DOCUMENT_RECEIVED" or "DOCUMENT_SENT"
-            //    peppolDocumentType: "", // "INVOICE"
-            //    sender: "9925:BE0440058217",
-            //    receiver: "0208:0440058217",
-            //    startDateTime: "", // "2023-07-25T11:03:26.688Z"
-            //    endDateTime: "", // "2023-07-29T11:03:26.688Z"
-            //    page: "",
-            //    pageSize: ""
-            //);
+            
             string eventType = RadioButtonGetReceived.Checked ? "DOCUMENT_RECEIVED" : "DOCUMENT_SENT";
-
             var jsonResponse = await AdemicoClient.GetNotificationsAsync(
                 transmissionId: "", // "f8a591c77b2211f0b1ed0af13d778bd4"
                 documentId: "",
@@ -179,8 +169,8 @@ namespace Mario2026
             {
                 ToolStripStatusLabel.Text = "Notifications retrieved successfully.";
                 var deserializedString = JsonConvert.DeserializeObject(jsonResponse);
-                RichTextBoxResult.Text = JsonConvert.SerializeObject(deserializedString, Newtonsoft.Json.Formatting.Indented);
-                DoPopUpResult(RichTextBoxResult.Text); // Show the result in a popup
+                RichTextBoxResult.Text = JsonConvert.SerializeObject(deserializedString, Newtonsoft.Json.Formatting.Indented);              
+                DoPopUpNotificationData(RichTextBoxResult.Text); // Show the result in a popup with JSON table view
             }
             else
             {
@@ -188,8 +178,7 @@ namespace Mario2026
                 RichTextBoxResult.Text = "";
             }
         }
-               
-
+                
         // Entities Tab
         async private void ButtonLookUp_Click(object sender, EventArgs e)
         {
@@ -288,7 +277,8 @@ namespace Mario2026
                 {
                     var deserializedString = JsonConvert.DeserializeObject(respons.ResponseBody);
                     RichTextBoxResult.Text = JsonConvert.SerializeObject(deserializedString, Newtonsoft.Json.Formatting.Indented);
-                    DoPopUpResult(RichTextBoxResult.Text); // Show the result in a popup
+                    // DoPopUpResult(RichTextBoxResult.Text); // Show the result in a popup
+                    DoPopUpEntitiesData(RichTextBoxResult.Text); // Show the result in a popup with JSON table view
                 }
                 else
                 {
@@ -648,6 +638,148 @@ namespace Mario2026
             };
             FormResultPopUp.Controls.Add(richTextBox); // Add the RichTextBox to the popup form
             FormResultPopUp.ShowDialog(this); // Show the popup form as a dialog, centered on the main form
-        }        
+        }
+
+        private void DoPopUpNotificationData(string messageAsJson)
+        {
+            FormDataGridJsonPopUp.Controls.Clear();
+            FormDataGridJsonPopUp formJsonTable = new()
+            {
+                jsonData = messageAsJson, // Pass the JSON data to the popup form
+                Dock = DockStyle.Fill // Fill the popup form with the JSON table view                
+            };
+            formJsonTable.LoadNotificationJsonData();            
+            formJsonTable.ShowDialog(this); // Show the popup form as a dialog, centered on the main form
+        }
+
+        private void DoPopUpEntitiesData(string messageAsJson)
+        {
+            FormDataGridJsonPopUp.Controls.Clear();
+            FormDataGridJsonPopUp formJsonTable = new()
+            {
+                jsonData = messageAsJson, // Pass the JSON data to the popup form
+                Dock = DockStyle.Fill // Fill the popup form with the JSON table view                
+            };
+            formJsonTable.LoadRegistrationJsonData();
+            formJsonTable.ShowDialog(this); // Show the popup form as a dialog, centered on the main form
+        }
     }
 }
+
+
+
+
+
+
+
+//using System;
+//using System.Collections.Generic;
+//using System.Windows.Forms;
+//using Newtonsoft.Json;
+
+//namespace JsonToTableWinForms
+//{
+//    public partial class MainForm : Form
+//    {
+//        private Root rootData;
+//        private int currentPage;
+
+//        public MainForm()
+//        {
+//            InitializeComponent();
+//            SetupUI();
+//            LoadJsonData();
+//            ShowPage(0);
+//        }
+
+//        private void SetupUI()
+//        {
+//            // DataGridView
+//            dataGridView1.Dock = DockStyle.Top;
+//            dataGridView1.Height = 300;
+
+//            // Buttons & Label
+//            var panel = new FlowLayoutPanel
+//            {
+//                Dock = DockStyle.Bottom,
+//                Height = 40,
+//                FlowDirection = FlowDirection.LeftToRight
+//            };
+
+//            var btnPrev = new Button { Text = "Previous" };
+//            var btnNext = new Button { Text = "Next" };
+//            lblPageInfo = new Label { AutoSize = true, Padding = new Padding(10, 10, 0, 0) };
+
+//            btnPrev.Click += (s, e) => ShowPage(currentPage - 1);
+//            btnNext.Click += (s, e) => ShowPage(currentPage + 1);
+
+//            panel.Controls.Add(btnPrev);
+//            panel.Controls.Add(btnNext);
+//            panel.Controls.Add(lblPageInfo);
+
+//            Controls.Add(panel);
+//            Controls.Add(dataGridView1);
+//        }
+
+//        private Label lblPageInfo;
+//        private DataGridView dataGridView1 = new DataGridView();
+
+//        private void LoadJsonData()
+//        {
+//            string json = System.IO.File.ReadAllText("data.json");
+//            rootData = JsonConvert.DeserializeObject<Root>(json);
+//        }
+
+//        private void ShowPage(int pageIndex)
+//        {
+//            int pageSize = rootData.Pagination.PageSize;
+//            int totalCount = rootData.Pagination.Count;
+
+//            if (pageIndex < 0 || pageIndex > (totalCount - 1) / pageSize)
+//                return;
+
+//            currentPage = pageIndex;
+//            rootData.Pagination.Page = pageIndex;
+
+//            var pageData = rootData.Notifications
+//                                   .GetRange(pageIndex * pageSize,
+//                                             Math.Min(pageSize, totalCount - pageIndex * pageSize));
+
+//            dataGridView1.DataSource = null;
+//            dataGridView1.DataSource = pageData;
+
+//            lblPageInfo.Text = $"Page {pageIndex + 1} of {Math.Ceiling((double)totalCount / pageSize)}";
+//        }
+//    }
+
+//    public class Root
+//    {
+//        [JsonProperty("pagination")]
+//        public Pagination Pagination { get; set; }
+
+//        [JsonProperty("notifications")]
+//        public List<Notification> Notifications { get; set; }
+//    }
+
+//    public class Pagination
+//    {
+//        public int Count { get; set; }
+//        public int Page { get; set; }
+//        public int PageSize { get; set; }
+//    }
+
+//    public class Notification
+//    {
+//        public string EventType { get; set; }
+//        public int NotificationId { get; set; }
+//        public string TransmissionId { get; set; }
+//        public string SbdhTransmissionId { get; set; }
+//        public DateTime NotificationDate { get; set; }
+//        public string DocumentId { get; set; }
+//        public string PeppolDocumentType { get; set; }
+//        public string DocumentStatus { get; set; }
+//        public string Sender { get; set; }
+//        public string Receiver { get; set; }
+//        public List<object> Details { get; set; }
+//    }
+//}
