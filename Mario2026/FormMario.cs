@@ -12,7 +12,7 @@ namespace Mario2026
             Text = "Mario2026";
         }
         private void FormMario_Load(object sender, EventArgs e)
-        {            
+        {
             if (Properties.Settings.Default.MarioMainFormTop <= 0)
             {
                 this.Width = 816;
@@ -184,7 +184,7 @@ namespace Mario2026
 
         private void TestingToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form ademicoTesting = new FormAdemicoTesting
+            Form ademicoTesting = new FormApiActions
             {
                 Owner = this
             };
@@ -193,7 +193,7 @@ namespace Mario2026
 
         private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form settingsForm = new FormAdemicoSettings 
+            Form settingsForm = new FormApiSettings
             {
                 Owner = this
             };

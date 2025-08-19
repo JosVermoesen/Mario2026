@@ -1,8 +1,8 @@
 ﻿namespace Mario2026
 {
-    public partial class FormAdemicoSettings : Form
+    public partial class FormApiSettings : Form
     {
-        public FormAdemicoSettings()
+        public FormApiSettings()
         {
             InitializeComponent();
         }

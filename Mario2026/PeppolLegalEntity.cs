@@ -1,7 +1,8 @@
 ﻿namespace Mario2026
 {
     public class ViesApproximate
-    {   public string? Name { get; set; }
+    {
+        public string? Name { get; set; }
         public string? Street { get; set; }
         public string? PostalCode { get; set; }
         public string? City { get; set; }

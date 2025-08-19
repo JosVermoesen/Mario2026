@@ -39,7 +39,7 @@
             // LabelFile
             // 
             LabelFile.AutoSize = true;
-            LabelFile.Location = new Point(103, 13);
+            LabelFile.Location = new Point(93, 13);
             LabelFile.Name = "LabelFile";
             LabelFile.Size = new Size(230, 15);
             LabelFile.TabIndex = 0;

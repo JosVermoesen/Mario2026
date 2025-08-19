@@ -8,6 +8,56 @@ namespace Mario2026
 {
     public static class AdemicoClient
     {
+        public static class PeppolInvoiceSender
+        {
+            public sealed record ApiResult(HttpStatusCode StatusCode, string? ResponseBody);
+            /// <summary>
+            /// Sends a UBL invoice/credit note file to the Buyer via the Peppol API.
+            /// Matches the Postman definition: multipart/form-data with Basic authentication.
+            /// </summary>
+            public static async Task<ApiResult> SendUblInvoiceAsync(
+                string filePath,
+                bool xC5Reporting = false,
+                CancellationToken cancellationToken = default)
+            {
+                string ademicoUrl = Properties.Settings.Default.AdemicoUrl;
+                string accessToken = Properties.Settings.Default.AdemicoAccessToken;
+                string username = Properties.Settings.Default.AdemicoUsername;
+                string password = Properties.Settings.Default.AdemicoPassword;
+                                
+                // Prepare target URL with query parameter
+                string requestUri = $"{ademicoUrl.TrimEnd('/')}/api/peppol/v1/invoices/ubl-submissions" +
+                                    $"?accessToken={Uri.EscapeDataString(accessToken)}";
+
+                using var http = new HttpClient();
+
+                // Basic Auth header
+                var credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}"));
+                http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
+
+                // Accept JSON
+                http.DefaultRequestHeaders.Accept.Clear();
+                http.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                // X-C5-REPORTING header
+                http.DefaultRequestHeaders.Add("X-C5-REPORTING", xC5Reporting.ToString().ToLowerInvariant());
+
+                // Prepare multipart content with the UBL XML file
+                using var form = new MultipartFormDataContent();
+                using var fileStream = File.OpenRead(filePath);
+                var fileContent = new StreamContent(fileStream);
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/xml");
+                form.Add(fileContent, "file", Path.GetFileName(filePath));
+
+                using var response = await http.PostAsync(requestUri, form, cancellationToken).ConfigureAwait(false);
+                string? body = response.Content is null
+                    ? null
+                    : await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+
+                return new ApiResult(response.StatusCode, body);
+            }
+        }
+
         public static async Task<string> GetNotificationsAsync(
             string transmissionId, string documentId, string eventType, string peppolDocumentType, string sender,
             string receiver, string startDateTime, string endDateTime, string page, string pageSize,
@@ -17,10 +67,7 @@ namespace Mario2026
             string accessToken = Properties.Settings.Default.AdemicoAccessToken;
             string username = Properties.Settings.Default.AdemicoUsername;
             string password = Properties.Settings.Default.AdemicoPassword;
-
-            if (string.IsNullOrWhiteSpace(ademicoUrl))
-                throw new ArgumentException("Base URL is required.", nameof(ademicoUrl));
-
+                        
             // Helper to URL-encode query parameters safely
             static string Encode(string val) => Uri.EscapeDataString(val ?? string.Empty);
 
@@ -73,6 +120,8 @@ namespace Mario2026
         /// <param name="accessToken">Access token (query parameter)</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>HTTP status code and raw response body</returns>
+        /// 
+        
         public static async Task<LegalEntityResult> GetPeppolRegistrationAsync(
                 string? country, string? peppolRegistrationScheme, string? peppolRegistrationIdentifier,
                 string? peppolSupportedDocument, string? legalEntityId,
@@ -161,11 +210,14 @@ namespace Mario2026
                 return $"Error: {ex.Message}";
             }
         }
+
         public sealed record ApiResult(HttpStatusCode StatusCode, string? ResponseBody);
         /// <summary>
         /// POST {{ademicoUrl}}/api/peppol/v1/legal-entities?accessToken={{ademicoAccessToken}}
         /// Creates/registers a legal entity in the Peppol network using Basic authentication.
         /// </summary>
+        /// 
+        
         public static async Task<ApiResult> CreateOrRegisterLegalEntityAsync(
             CreateLegalEntityRequest request,
             CancellationToken cancellationToken = default)
@@ -180,12 +232,13 @@ namespace Mario2026
             var baseUrl = ademicoUrl.TrimEnd('/');
             var requestUri = $"{baseUrl}/api/peppol/v1/legal-entities?accessToken={Uri.EscapeDataString(accessToken)}";
 
-            var jsonOptions = new JsonSerializerOptions
+            JsonSerializerOptions jsonSerializerOptions = new()
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                 WriteIndented = false
             };
+            var jsonOptions = jsonSerializerOptions;
 
             using var http = new HttpClient();
 
@@ -207,7 +260,6 @@ namespace Mario2026
 
             return new ApiResult(response.StatusCode, body);
         }
-
     }
 }
 

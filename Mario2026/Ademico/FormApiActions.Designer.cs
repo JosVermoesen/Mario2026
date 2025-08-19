@@ -1,6 +1,6 @@
 ﻿namespace Mario2026
 {
-    partial class FormAdemicoTesting
+    partial class FormApiActions
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +30,6 @@
         {
             TabControlVariousTools = new TabControl();
             TabActions = new TabPage();
-            ButtonNotifications = new Button();
             label8 = new Label();
             TextBoxLegalEntityId = new TextBox();
             label7 = new Label();
@@ -43,6 +42,19 @@
             TextBoxCountryCode = new TextBox();
             ButtonGetPeppolRegistrations = new Button();
             ButtonCheckConnectivity = new Button();
+            TabNotifications = new TabPage();
+            TextBoxSender = new TextBox();
+            TextBoxReceiver = new TextBox();
+            RadioButtonGetSent = new RadioButton();
+            RadioButtonGetReceived = new RadioButton();
+            ButtonNotifications = new Button();
+            TabInvoiceSend = new TabPage();
+            ButtonCheckFile = new Button();
+            LabelFile = new Label();
+            ButtonSendUblDocument = new Button();
+            TabInvoiceReceive = new TabPage();
+            TabResponse = new TabPage();
+            RichTextBoxResult = new RichTextBox();
             TabEntities = new TabPage();
             ButtonLookUp = new Button();
             label3 = new Label();
@@ -52,37 +64,35 @@
             TextBoxIdentifier = new TextBox();
             TextBoxCompanyName = new TextBox();
             ButtonEntityNew = new Button();
-            TabResponse = new TabPage();
-            RichTextBoxResult = new RichTextBox();
-            TabInvoiceSend = new TabPage();
-            TabInvoiceReceive = new TabPage();
             StatusStrip = new StatusStrip();
             ToolStripStatusLabel = new ToolStripStatusLabel();
             ButtonClose = new Button();
             TabControlVariousTools.SuspendLayout();
             TabActions.SuspendLayout();
-            TabEntities.SuspendLayout();
+            TabNotifications.SuspendLayout();
+            TabInvoiceSend.SuspendLayout();
             TabResponse.SuspendLayout();
+            TabEntities.SuspendLayout();
             StatusStrip.SuspendLayout();
             SuspendLayout();
             // 
             // TabControlVariousTools
             // 
             TabControlVariousTools.Controls.Add(TabActions);
-            TabControlVariousTools.Controls.Add(TabEntities);
-            TabControlVariousTools.Controls.Add(TabResponse);
+            TabControlVariousTools.Controls.Add(TabNotifications);
             TabControlVariousTools.Controls.Add(TabInvoiceSend);
             TabControlVariousTools.Controls.Add(TabInvoiceReceive);
+            TabControlVariousTools.Controls.Add(TabResponse);
+            TabControlVariousTools.Controls.Add(TabEntities);
             TabControlVariousTools.Dock = DockStyle.Fill;
             TabControlVariousTools.Location = new Point(0, 0);
             TabControlVariousTools.Name = "TabControlVariousTools";
             TabControlVariousTools.SelectedIndex = 0;
-            TabControlVariousTools.Size = new Size(473, 350);
+            TabControlVariousTools.Size = new Size(549, 350);
             TabControlVariousTools.TabIndex = 3;
             // 
             // TabActions
             // 
-            TabActions.Controls.Add(ButtonNotifications);
             TabActions.Controls.Add(label8);
             TabActions.Controls.Add(TextBoxLegalEntityId);
             TabActions.Controls.Add(label7);
@@ -98,25 +108,15 @@
             TabActions.Location = new Point(4, 24);
             TabActions.Name = "TabActions";
             TabActions.Padding = new Padding(3);
-            TabActions.Size = new Size(465, 322);
+            TabActions.Size = new Size(541, 322);
             TabActions.TabIndex = 0;
             TabActions.Text = "Opzoekingen";
             TabActions.UseVisualStyleBackColor = true;
             // 
-            // ButtonNotifications
-            // 
-            ButtonNotifications.Location = new Point(314, 191);
-            ButtonNotifications.Name = "ButtonNotifications";
-            ButtonNotifications.Size = new Size(140, 45);
-            ButtonNotifications.TabIndex = 6;
-            ButtonNotifications.Text = "Notificaties";
-            ButtonNotifications.UseVisualStyleBackColor = true;
-            ButtonNotifications.Click += ButtonNotifications_Click;
-            // 
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(0, 165);
+            label8.Location = new Point(5, 165);
             label8.Name = "label8";
             label8.Size = new Size(75, 15);
             label8.TabIndex = 13;
@@ -127,7 +127,8 @@
             TextBoxLegalEntityId.Location = new Point(92, 162);
             TextBoxLegalEntityId.Name = "TextBoxLegalEntityId";
             TextBoxLegalEntityId.Size = new Size(54, 23);
-            TextBoxLegalEntityId.TabIndex = 12;
+            TextBoxLegalEntityId.TabIndex = 0;
+            TextBoxLegalEntityId.TextChanged += TextBoxLegalEntityId_TextChanged;
             // 
             // label7
             // 
@@ -142,8 +143,8 @@
             // 
             TextBoxSupportedDocument.Location = new Point(92, 133);
             TextBoxSupportedDocument.Name = "TextBoxSupportedDocument";
-            TextBoxSupportedDocument.Size = new Size(202, 23);
-            TextBoxSupportedDocument.TabIndex = 10;
+            TextBoxSupportedDocument.Size = new Size(304, 23);
+            TextBoxSupportedDocument.TabIndex = 4;
             // 
             // label6
             // 
@@ -158,8 +159,8 @@
             // 
             TextBoxRegIdentifier.Location = new Point(92, 104);
             TextBoxRegIdentifier.Name = "TextBoxRegIdentifier";
-            TextBoxRegIdentifier.Size = new Size(202, 23);
-            TextBoxRegIdentifier.TabIndex = 8;
+            TextBoxRegIdentifier.Size = new Size(304, 23);
+            TextBoxRegIdentifier.TabIndex = 3;
             // 
             // label5
             // 
@@ -174,8 +175,8 @@
             // 
             TextBoxRegScheme.Location = new Point(92, 75);
             TextBoxRegScheme.Name = "TextBoxRegScheme";
-            TextBoxRegScheme.Size = new Size(202, 23);
-            TextBoxRegScheme.TabIndex = 6;
+            TextBoxRegScheme.Size = new Size(304, 23);
+            TextBoxRegScheme.TabIndex = 2;
             // 
             // label4
             // 
@@ -191,15 +192,16 @@
             TextBoxCountryCode.Location = new Point(92, 44);
             TextBoxCountryCode.Name = "TextBoxCountryCode";
             TextBoxCountryCode.Size = new Size(54, 23);
-            TextBoxCountryCode.TabIndex = 4;
+            TextBoxCountryCode.TabIndex = 1;
             // 
             // ButtonGetPeppolRegistrations
             // 
-            ButtonGetPeppolRegistrations.Location = new Point(3, 191);
+            ButtonGetPeppolRegistrations.Location = new Point(0, 201);
             ButtonGetPeppolRegistrations.Name = "ButtonGetPeppolRegistrations";
             ButtonGetPeppolRegistrations.Size = new Size(291, 40);
             ButtonGetPeppolRegistrations.TabIndex = 3;
-            ButtonGetPeppolRegistrations.Text = "Registratie(s) Opzoeken";
+            ButtonGetPeppolRegistrations.TabStop = false;
+            ButtonGetPeppolRegistrations.Text = "Registratie(s) &Opzoeken";
             ButtonGetPeppolRegistrations.UseVisualStyleBackColor = true;
             ButtonGetPeppolRegistrations.Click += ButtonGetPeppolRegistrations_Click;
             // 
@@ -209,9 +211,147 @@
             ButtonCheckConnectivity.Name = "ButtonCheckConnectivity";
             ButtonCheckConnectivity.Size = new Size(122, 23);
             ButtonCheckConnectivity.TabIndex = 1;
-            ButtonCheckConnectivity.Text = "Verbinding Testen";
+            ButtonCheckConnectivity.TabStop = false;
+            ButtonCheckConnectivity.Text = "&Verbinding Testen";
             ButtonCheckConnectivity.UseVisualStyleBackColor = true;
             ButtonCheckConnectivity.Click += ButtonCheckConnectivity_Click;
+            // 
+            // TabNotifications
+            // 
+            TabNotifications.Controls.Add(TextBoxSender);
+            TabNotifications.Controls.Add(TextBoxReceiver);
+            TabNotifications.Controls.Add(RadioButtonGetSent);
+            TabNotifications.Controls.Add(RadioButtonGetReceived);
+            TabNotifications.Controls.Add(ButtonNotifications);
+            TabNotifications.Location = new Point(4, 24);
+            TabNotifications.Name = "TabNotifications";
+            TabNotifications.Size = new Size(541, 322);
+            TabNotifications.TabIndex = 5;
+            TabNotifications.Text = "Meldingen";
+            TabNotifications.UseVisualStyleBackColor = true;
+            // 
+            // TextBoxSender
+            // 
+            TextBoxSender.Location = new Point(296, 36);
+            TextBoxSender.Name = "TextBoxSender";
+            TextBoxSender.Size = new Size(237, 23);
+            TextBoxSender.TabIndex = 4;
+            // 
+            // TextBoxReceiver
+            // 
+            TextBoxReceiver.Location = new Point(296, 7);
+            TextBoxReceiver.Name = "TextBoxReceiver";
+            TextBoxReceiver.Size = new Size(237, 23);
+            TextBoxReceiver.TabIndex = 3;
+            // 
+            // RadioButtonGetSent
+            // 
+            RadioButtonGetSent.AutoSize = true;
+            RadioButtonGetSent.Location = new Point(206, 36);
+            RadioButtonGetSent.Name = "RadioButtonGetSent";
+            RadioButtonGetSent.Size = new Size(80, 19);
+            RadioButtonGetSent.TabIndex = 2;
+            RadioButtonGetSent.TabStop = true;
+            RadioButtonGetSent.Text = "Verzonden";
+            RadioButtonGetSent.UseVisualStyleBackColor = true;
+            // 
+            // RadioButtonGetReceived
+            // 
+            RadioButtonGetReceived.AutoSize = true;
+            RadioButtonGetReceived.Location = new Point(206, 8);
+            RadioButtonGetReceived.Name = "RadioButtonGetReceived";
+            RadioButtonGetReceived.Size = new Size(84, 19);
+            RadioButtonGetReceived.TabIndex = 1;
+            RadioButtonGetReceived.TabStop = true;
+            RadioButtonGetReceived.Text = "Ontvangen";
+            RadioButtonGetReceived.UseVisualStyleBackColor = true;
+            RadioButtonGetReceived.CheckedChanged += RadioButtonGetReceived_CheckedChanged;
+            // 
+            // ButtonNotifications
+            // 
+            ButtonNotifications.Location = new Point(8, 8);
+            ButtonNotifications.Name = "ButtonNotifications";
+            ButtonNotifications.Size = new Size(100, 51);
+            ButtonNotifications.TabIndex = 0;
+            ButtonNotifications.Text = "Meldingen Ophalen";
+            ButtonNotifications.UseVisualStyleBackColor = true;
+            ButtonNotifications.Click += ButtonNotifications_Click;
+            // 
+            // TabInvoiceSend
+            // 
+            TabInvoiceSend.AllowDrop = true;
+            TabInvoiceSend.Controls.Add(ButtonCheckFile);
+            TabInvoiceSend.Controls.Add(LabelFile);
+            TabInvoiceSend.Controls.Add(ButtonSendUblDocument);
+            TabInvoiceSend.Location = new Point(4, 24);
+            TabInvoiceSend.Name = "TabInvoiceSend";
+            TabInvoiceSend.Size = new Size(541, 322);
+            TabInvoiceSend.TabIndex = 3;
+            TabInvoiceSend.Text = "Facturen Sturen";
+            TabInvoiceSend.UseVisualStyleBackColor = true;
+            TabInvoiceSend.DragDrop += TabInvoiceSend_DragDrop;
+            TabInvoiceSend.DragEnter += TabInvoiceSend_DragEnter;
+            // 
+            // ButtonCheckFile
+            // 
+            ButtonCheckFile.Enabled = false;
+            ButtonCheckFile.Location = new Point(8, 7);
+            ButtonCheckFile.Name = "ButtonCheckFile";
+            ButtonCheckFile.Size = new Size(118, 23);
+            ButtonCheckFile.TabIndex = 2;
+            ButtonCheckFile.Text = "Controle Bestand";
+            ButtonCheckFile.UseVisualStyleBackColor = true;
+            ButtonCheckFile.Click += ButtonCheckFile_Click;
+            // 
+            // LabelFile
+            // 
+            LabelFile.AutoSize = true;
+            LabelFile.Location = new Point(8, 33);
+            LabelFile.Name = "LabelFile";
+            LabelFile.Size = new Size(230, 15);
+            LabelFile.TabIndex = 1;
+            LabelFile.Text = "Sleep het UBL xml bestand naar dit venster";
+            LabelFile.TextChanged += LabelFile_TextChanged;
+            // 
+            // ButtonSendUblDocument
+            // 
+            ButtonSendUblDocument.Enabled = false;
+            ButtonSendUblDocument.Location = new Point(8, 240);
+            ButtonSendUblDocument.Name = "ButtonSendUblDocument";
+            ButtonSendUblDocument.Size = new Size(132, 50);
+            ButtonSendUblDocument.TabIndex = 0;
+            ButtonSendUblDocument.Text = "UBL Document Verzenden";
+            ButtonSendUblDocument.UseVisualStyleBackColor = true;
+            ButtonSendUblDocument.Click += ButtonSendUblDocument_Click;
+            // 
+            // TabInvoiceReceive
+            // 
+            TabInvoiceReceive.Location = new Point(4, 24);
+            TabInvoiceReceive.Name = "TabInvoiceReceive";
+            TabInvoiceReceive.Size = new Size(541, 322);
+            TabInvoiceReceive.TabIndex = 4;
+            TabInvoiceReceive.Text = "Facturen Ontvangen";
+            TabInvoiceReceive.UseVisualStyleBackColor = true;
+            // 
+            // TabResponse
+            // 
+            TabResponse.Controls.Add(RichTextBoxResult);
+            TabResponse.Location = new Point(4, 24);
+            TabResponse.Name = "TabResponse";
+            TabResponse.Size = new Size(541, 322);
+            TabResponse.TabIndex = 1;
+            TabResponse.Text = "Antwoorden";
+            TabResponse.UseVisualStyleBackColor = true;
+            // 
+            // RichTextBoxResult
+            // 
+            RichTextBoxResult.Dock = DockStyle.Fill;
+            RichTextBoxResult.Location = new Point(0, 0);
+            RichTextBoxResult.Name = "RichTextBoxResult";
+            RichTextBoxResult.ReadOnly = true;
+            RichTextBoxResult.Size = new Size(541, 322);
+            RichTextBoxResult.TabIndex = 8;
+            RichTextBoxResult.Text = "";
             // 
             // TabEntities
             // 
@@ -225,9 +365,9 @@
             TabEntities.Controls.Add(ButtonEntityNew);
             TabEntities.Location = new Point(4, 24);
             TabEntities.Name = "TabEntities";
-            TabEntities.Size = new Size(452, 322);
+            TabEntities.Size = new Size(541, 322);
             TabEntities.TabIndex = 2;
-            TabEntities.Text = "Entities";
+            TabEntities.Text = "Entiteiten";
             TabEntities.UseVisualStyleBackColor = true;
             // 
             // ButtonLookUp
@@ -299,50 +439,12 @@
             ButtonEntityNew.UseVisualStyleBackColor = true;
             ButtonEntityNew.Click += ButtonEntityNew_Click;
             // 
-            // TabResponse
-            // 
-            TabResponse.Controls.Add(RichTextBoxResult);
-            TabResponse.Location = new Point(4, 24);
-            TabResponse.Name = "TabResponse";
-            TabResponse.Size = new Size(452, 322);
-            TabResponse.TabIndex = 1;
-            TabResponse.Text = "Resultaat";
-            TabResponse.UseVisualStyleBackColor = true;
-            // 
-            // RichTextBoxResult
-            // 
-            RichTextBoxResult.Dock = DockStyle.Fill;
-            RichTextBoxResult.Location = new Point(0, 0);
-            RichTextBoxResult.Name = "RichTextBoxResult";
-            RichTextBoxResult.ReadOnly = true;
-            RichTextBoxResult.Size = new Size(452, 322);
-            RichTextBoxResult.TabIndex = 8;
-            RichTextBoxResult.Text = "";
-            // 
-            // TabInvoiceSend
-            // 
-            TabInvoiceSend.Location = new Point(4, 24);
-            TabInvoiceSend.Name = "TabInvoiceSend";
-            TabInvoiceSend.Size = new Size(465, 322);
-            TabInvoiceSend.TabIndex = 3;
-            TabInvoiceSend.Text = "Facturen Sturen";
-            TabInvoiceSend.UseVisualStyleBackColor = true;
-            // 
-            // TabInvoiceReceive
-            // 
-            TabInvoiceReceive.Location = new Point(4, 24);
-            TabInvoiceReceive.Name = "TabInvoiceReceive";
-            TabInvoiceReceive.Size = new Size(465, 322);
-            TabInvoiceReceive.TabIndex = 4;
-            TabInvoiceReceive.Text = "Facturen Ontvangen";
-            TabInvoiceReceive.UseVisualStyleBackColor = true;
-            // 
             // StatusStrip
             // 
             StatusStrip.Items.AddRange(new ToolStripItem[] { ToolStripStatusLabel });
             StatusStrip.Location = new Point(0, 328);
             StatusStrip.Name = "StatusStrip";
-            StatusStrip.Size = new Size(473, 22);
+            StatusStrip.Size = new Size(549, 22);
             StatusStrip.TabIndex = 4;
             // 
             // ToolStripStatusLabel
@@ -360,24 +462,28 @@
             ButtonClose.Text = "Close";
             ButtonClose.UseVisualStyleBackColor = true;
             // 
-            // FormAdemicoTesting
+            // FormApiActions
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = ButtonClose;
-            ClientSize = new Size(473, 350);
+            ClientSize = new Size(549, 350);
             Controls.Add(StatusStrip);
             Controls.Add(TabControlVariousTools);
             Controls.Add(ButtonClose);
-            Name = "FormAdemicoTesting";
+            Name = "FormApiActions";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "FormAdemicoTesting";
+            Text = "Mario API Acties";
             TabControlVariousTools.ResumeLayout(false);
             TabActions.ResumeLayout(false);
             TabActions.PerformLayout();
+            TabNotifications.ResumeLayout(false);
+            TabNotifications.PerformLayout();
+            TabInvoiceSend.ResumeLayout(false);
+            TabInvoiceSend.PerformLayout();
+            TabResponse.ResumeLayout(false);
             TabEntities.ResumeLayout(false);
             TabEntities.PerformLayout();
-            TabResponse.ResumeLayout(false);
             StatusStrip.ResumeLayout(false);
             StatusStrip.PerformLayout();
             ResumeLayout(false);
@@ -412,9 +518,17 @@
         private TextBox TextBoxRegIdentifier;
         private Label label5;
         private TextBox TextBoxRegScheme;
-        private Button ButtonNotifications;
         private TabPage TabInvoiceSend;
         private TabPage TabInvoiceReceive;
         private RichTextBox RichTextBoxResult;
+        private Button ButtonSendUblDocument;
+        private Label LabelFile;
+        private Button ButtonCheckFile;
+        private TabPage TabNotifications;
+        private Button ButtonNotifications;
+        private TextBox TextBoxSender;
+        private TextBox TextBoxReceiver;
+        private RadioButton RadioButtonGetSent;
+        private RadioButton RadioButtonGetReceived;
     }
 }

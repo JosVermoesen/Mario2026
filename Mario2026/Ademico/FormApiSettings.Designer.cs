@@ -1,6 +1,6 @@
 ﻿namespace Mario2026
 {
-    partial class FormAdemicoSettings
+    partial class FormApiSettings
     {
         /// <summary>
         /// Required designer variable.
@@ -120,7 +120,7 @@
             ButtonClose.UseVisualStyleBackColor = true;
             ButtonClose.Click += ButtonClose_Click;
             // 
-            // FormAdemicoSettings
+            // FormApiSettings
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -137,9 +137,9 @@
             Controls.Add(LabelUrl);
             Controls.Add(TextBoxUrl);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
-            Name = "FormAdemicoSettings";
+            Name = "FormApiSettings";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "FormAdemicoSettings";
+            Text = "Mario API Instellingen";
             Load += FormAdemicoSettings_Load;
             ResumeLayout(false);
             PerformLayout();
