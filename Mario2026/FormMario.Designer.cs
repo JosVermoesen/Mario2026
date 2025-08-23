@@ -30,8 +30,8 @@
         {
             MarioMenuStrip = new MenuStrip();
             ActionsToolStripMenuItem = new ToolStripMenuItem();
-            LookUpsToolStripMenuItem = new ToolStripMenuItem();
-            CheckUBLDocumentToolStripMenuItem = new ToolStripMenuItem();
+            PeppolActionsToolStripMenuItem = new ToolStripMenuItem();
+            UserSettingsMenuItem = new ToolStripMenuItem();
             CloseAppToolStripMenuItem = new ToolStripMenuItem();
             VpeToolStripMenuItem = new ToolStripMenuItem();
             AutoPageBreakTestToolStripMenuItem = new ToolStripMenuItem();
@@ -45,7 +45,7 @@
             toolStripSeparator2 = new ToolStripSeparator();
             UBLValidatorToolStripMenuItem = new ToolStripMenuItem();
             UBLDocsBillingToolStripMenuItem = new ToolStripMenuItem();
-            ademicoToolStripMenuItem = new ToolStripMenuItem();
+            PeppolToolStripMenuItem = new ToolStripMenuItem();
             TestingToolStripMenuItem = new ToolStripMenuItem();
             SettingsToolStripMenuItem = new ToolStripMenuItem();
             MarioMenuStrip.SuspendLayout();
@@ -53,39 +53,39 @@
             // 
             // MarioMenuStrip
             // 
-            MarioMenuStrip.Items.AddRange(new ToolStripItem[] { ActionsToolStripMenuItem, VpeToolStripMenuItem, InfoToolStripMenuItem, ademicoToolStripMenuItem });
+            MarioMenuStrip.Items.AddRange(new ToolStripItem[] { ActionsToolStripMenuItem, VpeToolStripMenuItem, PeppolToolStripMenuItem, InfoToolStripMenuItem });
             MarioMenuStrip.Location = new Point(0, 0);
             MarioMenuStrip.Name = "MarioMenuStrip";
-            MarioMenuStrip.Size = new Size(800, 24);
+            MarioMenuStrip.Size = new Size(352, 24);
             MarioMenuStrip.TabIndex = 1;
             MarioMenuStrip.Text = "menuStrip1";
             // 
             // ActionsToolStripMenuItem
             // 
-            ActionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { LookUpsToolStripMenuItem, CheckUBLDocumentToolStripMenuItem, CloseAppToolStripMenuItem });
+            ActionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { PeppolActionsToolStripMenuItem, UserSettingsMenuItem, CloseAppToolStripMenuItem });
             ActionsToolStripMenuItem.Name = "ActionsToolStripMenuItem";
             ActionsToolStripMenuItem.Size = new Size(51, 20);
             ActionsToolStripMenuItem.Text = "Acties";
             // 
-            // LookUpsToolStripMenuItem
+            // PeppolActionsToolStripMenuItem
             // 
-            LookUpsToolStripMenuItem.Name = "LookUpsToolStripMenuItem";
-            LookUpsToolStripMenuItem.Size = new Size(203, 22);
-            LookUpsToolStripMenuItem.Text = "Opzoekingen";
-            LookUpsToolStripMenuItem.Click += LookUpsToolStripMenuItem_Click;
+            PeppolActionsToolStripMenuItem.Name = "PeppolActionsToolStripMenuItem";
+            PeppolActionsToolStripMenuItem.Size = new Size(189, 22);
+            PeppolActionsToolStripMenuItem.Text = "Peppol Acties";
+            PeppolActionsToolStripMenuItem.Click += PeppolActionsToolStripMenuItem_Click;
             // 
-            // CheckUBLDocumentToolStripMenuItem
+            // UserSettingsMenuItem
             // 
-            CheckUBLDocumentToolStripMenuItem.Name = "CheckUBLDocumentToolStripMenuItem";
-            CheckUBLDocumentToolStripMenuItem.Size = new Size(203, 22);
-            CheckUBLDocumentToolStripMenuItem.Text = "Controle UBL Document";
-            CheckUBLDocumentToolStripMenuItem.Click += CheckUBLDocumentToolStripMenuItem_Click;
+            UserSettingsMenuItem.Name = "UserSettingsMenuItem";
+            UserSettingsMenuItem.Size = new Size(189, 22);
+            UserSettingsMenuItem.Text = "Gebruiker Instellingen";
+            UserSettingsMenuItem.Click += UserSettingsMenuItem_Click;
             // 
             // CloseAppToolStripMenuItem
             // 
             CloseAppToolStripMenuItem.Name = "CloseAppToolStripMenuItem";
             CloseAppToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.F4;
-            CloseAppToolStripMenuItem.Size = new Size(203, 22);
+            CloseAppToolStripMenuItem.Size = new Size(189, 22);
             CloseAppToolStripMenuItem.Text = "Afsluiten";
             CloseAppToolStripMenuItem.Click += CloseAppToolStripMenuItem_Click;
             // 
@@ -95,6 +95,7 @@
             VpeToolStripMenuItem.Name = "VpeToolStripMenuItem";
             VpeToolStripMenuItem.Size = new Size(39, 20);
             VpeToolStripMenuItem.Text = "VPE";
+            VpeToolStripMenuItem.Visible = false;
             // 
             // AutoPageBreakTestToolStripMenuItem
             // 
@@ -170,32 +171,34 @@
             UBLDocsBillingToolStripMenuItem.Text = "Docs Billing 3.0";
             UBLDocsBillingToolStripMenuItem.Click += UBLDocsBillingToolStripMenuItem_Click;
             // 
-            // ademicoToolStripMenuItem
+            // PeppolToolStripMenuItem
             // 
-            ademicoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { TestingToolStripMenuItem, SettingsToolStripMenuItem });
-            ademicoToolStripMenuItem.Name = "ademicoToolStripMenuItem";
-            ademicoToolStripMenuItem.Size = new Size(67, 20);
-            ademicoToolStripMenuItem.Text = "Ademico";
+            PeppolToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { TestingToolStripMenuItem, SettingsToolStripMenuItem });
+            PeppolToolStripMenuItem.Name = "PeppolToolStripMenuItem";
+            PeppolToolStripMenuItem.Size = new Size(71, 20);
+            PeppolToolStripMenuItem.Text = "Peppol IO";
+            PeppolToolStripMenuItem.Visible = false;
             // 
             // TestingToolStripMenuItem
             // 
             TestingToolStripMenuItem.Name = "TestingToolStripMenuItem";
-            TestingToolStripMenuItem.Size = new Size(180, 22);
+            TestingToolStripMenuItem.Size = new Size(116, 22);
             TestingToolStripMenuItem.Text = "Testing";
             TestingToolStripMenuItem.Click += TestingToolStripMenuItem_Click;
             // 
             // SettingsToolStripMenuItem
             // 
             SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem";
-            SettingsToolStripMenuItem.Size = new Size(180, 22);
+            SettingsToolStripMenuItem.Size = new Size(116, 22);
             SettingsToolStripMenuItem.Text = "Settings";
+            SettingsToolStripMenuItem.Visible = false;
             SettingsToolStripMenuItem.Click += SettingsToolStripMenuItem_Click;
             // 
             // FormMario
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(352, 190);
             Controls.Add(MarioMenuStrip);
             IsMdiContainer = true;
             MainMenuStrip = MarioMenuStrip;
@@ -203,6 +206,7 @@
             Text = "Mario";
             FormClosing += FormMario_FormClosing;
             Load += FormMario_Load;
+            Shown += FormMario_Shown;
             MarioMenuStrip.ResumeLayout(false);
             MarioMenuStrip.PerformLayout();
             ResumeLayout(false);
@@ -213,8 +217,7 @@
 
         private MenuStrip MarioMenuStrip;
         private ToolStripMenuItem ActionsToolStripMenuItem;
-        private ToolStripMenuItem LookUpsToolStripMenuItem;
-        private ToolStripMenuItem CheckUBLDocumentToolStripMenuItem;
+        private ToolStripMenuItem PeppolActionsToolStripMenuItem;
         private ToolStripMenuItem CloseAppToolStripMenuItem;
         private ToolStripMenuItem VpeToolStripMenuItem;
         private ToolStripMenuItem AutoPageBreakTestToolStripMenuItem;
@@ -228,8 +231,9 @@
         private ToolStripMenuItem UBLValidatorToolStripMenuItem;
         private ToolStripMenuItem UBLDocsBillingToolStripMenuItem;
         private ToolStripMenuItem VsoftToolStripMenuItem;
-        private ToolStripMenuItem ademicoToolStripMenuItem;
+        private ToolStripMenuItem PeppolToolStripMenuItem;
         private ToolStripMenuItem TestingToolStripMenuItem;
         private ToolStripMenuItem SettingsToolStripMenuItem;
+        private ToolStripMenuItem UserSettingsMenuItem;
     }
 }

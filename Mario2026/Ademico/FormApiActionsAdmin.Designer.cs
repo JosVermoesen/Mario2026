@@ -1,6 +1,6 @@
 ﻿namespace Mario2026
 {
-    partial class FormApiActions
+    partial class FormApiActionsAdmin
     {
         /// <summary>
         /// Required designer variable.
@@ -53,6 +53,7 @@
             LabelFile = new Label();
             ButtonSendUblDocument = new Button();
             TabInvoiceReceive = new TabPage();
+            ButtonGetUBLDocument = new Button();
             TabResponse = new TabPage();
             RichTextBoxResult = new RichTextBox();
             TabEntities = new TabPage();
@@ -67,10 +68,13 @@
             StatusStrip = new StatusStrip();
             ToolStripStatusLabel = new ToolStripStatusLabel();
             ButtonClose = new Button();
+            TextBoxTransmissionId = new TextBox();
+            LabelTransmissionId = new Label();
             TabControlVariousTools.SuspendLayout();
             TabActions.SuspendLayout();
             TabNotifications.SuspendLayout();
             TabInvoiceSend.SuspendLayout();
+            TabInvoiceReceive.SuspendLayout();
             TabResponse.SuspendLayout();
             TabEntities.SuspendLayout();
             StatusStrip.SuspendLayout();
@@ -326,12 +330,25 @@
             // 
             // TabInvoiceReceive
             // 
+            TabInvoiceReceive.Controls.Add(LabelTransmissionId);
+            TabInvoiceReceive.Controls.Add(TextBoxTransmissionId);
+            TabInvoiceReceive.Controls.Add(ButtonGetUBLDocument);
             TabInvoiceReceive.Location = new Point(4, 24);
             TabInvoiceReceive.Name = "TabInvoiceReceive";
             TabInvoiceReceive.Size = new Size(541, 322);
             TabInvoiceReceive.TabIndex = 4;
             TabInvoiceReceive.Text = "Facturen Ontvangen";
             TabInvoiceReceive.UseVisualStyleBackColor = true;
+            // 
+            // ButtonGetUBLDocument
+            // 
+            ButtonGetUBLDocument.Location = new Point(378, 14);
+            ButtonGetUBLDocument.Name = "ButtonGetUBLDocument";
+            ButtonGetUBLDocument.Size = new Size(135, 23);
+            ButtonGetUBLDocument.TabIndex = 0;
+            ButtonGetUBLDocument.Text = "Document Ophalen";
+            ButtonGetUBLDocument.UseVisualStyleBackColor = true;
+            ButtonGetUBLDocument.Click += ButtonGetUBLDocument_Click;
             // 
             // TabResponse
             // 
@@ -462,6 +479,23 @@
             ButtonClose.Text = "Close";
             ButtonClose.UseVisualStyleBackColor = true;
             // 
+            // TextBoxTransmissionId
+            // 
+            TextBoxTransmissionId.Location = new Point(101, 14);
+            TextBoxTransmissionId.Name = "TextBoxTransmissionId";
+            TextBoxTransmissionId.Size = new Size(232, 23);
+            TextBoxTransmissionId.TabIndex = 1;
+            TextBoxTransmissionId.Text = "f9ba35d67b2211f0bf1302bb4e4747f9";
+            // 
+            // LabelTransmissionId
+            // 
+            LabelTransmissionId.AutoSize = true;
+            LabelTransmissionId.Location = new Point(8, 17);
+            LabelTransmissionId.Name = "LabelTransmissionId";
+            LabelTransmissionId.Size = new Size(87, 15);
+            LabelTransmissionId.TabIndex = 2;
+            LabelTransmissionId.Text = "TransmissionID";
+            // 
             // FormApiActions
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -481,6 +515,8 @@
             TabNotifications.PerformLayout();
             TabInvoiceSend.ResumeLayout(false);
             TabInvoiceSend.PerformLayout();
+            TabInvoiceReceive.ResumeLayout(false);
+            TabInvoiceReceive.PerformLayout();
             TabResponse.ResumeLayout(false);
             TabEntities.ResumeLayout(false);
             TabEntities.PerformLayout();
@@ -530,5 +566,8 @@
         private TextBox TextBoxReceiver;
         private RadioButton RadioButtonGetSent;
         private RadioButton RadioButtonGetReceived;
+        private Button ButtonGetUBLDocument;
+        private TextBox TextBoxTransmissionId;
+        private Label LabelTransmissionId;
     }
 }

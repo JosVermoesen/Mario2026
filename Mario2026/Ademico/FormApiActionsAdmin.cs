@@ -1,25 +1,24 @@
 ﻿using Mario2026.Ademico;
 using Newtonsoft.Json;
 using System.Globalization;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Xml;
 
 namespace Mario2026
 {
-    public partial class FormApiActions : Form
+    public partial class FormApiActionsAdmin : Form
     {
         private readonly HttpClient httpCheck;
-        public Form FormResultPopUp { get; set; }
         public Form FormDataGridJsonPopUp { get; set; }
-        
-        public FormApiActions()
+
+        public FormApiActionsAdmin()
         {
             InitializeComponent();
             httpCheck = new HttpClient(); // Initialize HttpClient instance
 
-            FormResultPopUp = new FormResultPopUp { };
             FormDataGridJsonPopUp = new FormDataGridJsonPopUp { };
-            
+
             // Ensure events are hooked up if you didn't use the Designer
             this.DragEnter += TabInvoiceSend_DragEnter;
             this.DragDrop += TabInvoiceSend_DragDrop;
@@ -110,7 +109,7 @@ namespace Mario2026
                 {
                     var deserializedString = JsonConvert.DeserializeObject(value: result.ResponseBody);
                     RichTextBoxResult.Text = JsonConvert.SerializeObject(deserializedString, Newtonsoft.Json.Formatting.Indented);
-                    DoPopUpResult(RichTextBoxResult.Text); // Show the result in a popup
+                    DoPopUpDataGridJsonData(RichTextBoxResult.Text); // Show the result in a popup with JSON table view
                 }
                 else
                 {
@@ -150,7 +149,7 @@ namespace Mario2026
         async private void ButtonNotifications_Click(object sender, EventArgs e)
         {
             ToolStripStatusLabel.Text = "Bezig...";
-            
+
             string eventType = RadioButtonGetReceived.Checked ? "DOCUMENT_RECEIVED" : "DOCUMENT_SENT";
             var jsonResponse = await AdemicoClient.GetNotificationsAsync(
                 transmissionId: "", // "f8a591c77b2211f0b1ed0af13d778bd4"
@@ -169,8 +168,8 @@ namespace Mario2026
             {
                 ToolStripStatusLabel.Text = "Notifications retrieved successfully.";
                 var deserializedString = JsonConvert.DeserializeObject(jsonResponse);
-                RichTextBoxResult.Text = JsonConvert.SerializeObject(deserializedString, Newtonsoft.Json.Formatting.Indented);              
-                DoPopUpNotificationData(RichTextBoxResult.Text); // Show the result in a popup with JSON table view
+                RichTextBoxResult.Text = JsonConvert.SerializeObject(deserializedString, Newtonsoft.Json.Formatting.Indented);
+                DoPopUpDataGridJsonData(RichTextBoxResult.Text); // Show the result in a popup with JSON table view
             }
             else
             {
@@ -178,7 +177,7 @@ namespace Mario2026
                 RichTextBoxResult.Text = "";
             }
         }
-                
+
         // Entities Tab
         async private void ButtonLookUp_Click(object sender, EventArgs e)
         {
@@ -341,7 +340,7 @@ namespace Mario2026
                         PeppolIdentifier = new PeppolIdentifier
                         {
                             Scheme = "0208",
-                            Identifier = TextBoxIdentifier.Text
+                            Identifier = TextBoxIdentifier.Text[2..] // Remove the first two characters (country code)
                         },
                     SupportedDocuments =
                     {
@@ -359,6 +358,56 @@ namespace Mario2026
 
             ToolStripStatusLabel.Text = $"Status: {(int)result.StatusCode} {result.StatusCode}";
             MessageBox.Show($"Response: {result.ResponseBody}", "Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            var req2 = new CreateLegalEntityRequest
+            {
+                LegalEntityDetails = new LegalEntityDetails
+                {
+                    PublishInPeppolDirectory = true,
+                    Name = TextBoxCompanyName.Text,
+                    CountryCode = "BE",
+                    GeographicalInformation = TextBoxGeographicalInformation.Text,
+                    WebsiteURL = "",
+                    Contacts =
+                    {
+                        new Contact
+                        {
+                            ContactType = "public",
+                            Name = "Vsoft Support",
+                            PhoneNumber = "",
+                            Email = "support@vsoft.be"
+                        }
+                    },
+                    AdditionalInformation = ""
+                },
+
+                PeppolRegistrations =
+                {
+                    new PeppolRegistrationX
+                    {
+                        PeppolIdentifier = new PeppolIdentifier
+                        {
+                            Scheme = "9925",
+                            Identifier = TextBoxIdentifier.Text
+                        },
+                    SupportedDocuments =
+                    {
+                            "PEPPOL_BIS_BILLING_UBL_INVOICE_V3",
+                            "PEPPOL_BIS_BILLING_UBL_CREDIT_NOTE_V3",
+                            "PEPPOL_MESSAGE_LEVEL_RESPONSE_TRANSACTION_3_0",
+                            "PEPPOL_INVOICE_RESPONSE_TRANSACTION_3_0"
+                     },
+                    PeppolRegistration = true
+                }
+            }
+            };
+
+            var result2 = await AdemicoClient.CreateOrRegisterLegalEntityAsync(request: req2);
+
+            ToolStripStatusLabel.Text = $"Status: {(int)result2.StatusCode} {result2.StatusCode}";
+            MessageBox.Show($"Response: {result2.ResponseBody}", "Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
             ButtonEntityNew.Enabled = false; // Disable the button after creating the entity
             TextBoxCompanyName.Clear();
             TextBoxGeographicalInformation.Clear();
@@ -624,23 +673,7 @@ namespace Mario2026
             }
         }
 
-        private void DoPopUpResult(string message)
-        {
-            FormResultPopUp.Controls.Clear(); // Clear previous controls in the popup form
-            RichTextBox richTextBox = new()
-            {
-                Dock = DockStyle.Fill, // Fill the popup form with the RichTextBox
-                BackColor = Color.White, // Set background color to white for better readability
-                ForeColor = Color.Black, // Set text color to black for better contrast
-                ReadOnly = true,
-                Text = message, // Set the text from the main form's RichTextBox
-                Font = new Font("Consolas", 10) // Set a monospaced font for better readability
-            };
-            FormResultPopUp.Controls.Add(richTextBox); // Add the RichTextBox to the popup form
-            FormResultPopUp.ShowDialog(this); // Show the popup form as a dialog, centered on the main form
-        }
-
-        private void DoPopUpNotificationData(string messageAsJson)
+        private void DoPopUpDataGridJsonData(string messageAsJson)
         {
             FormDataGridJsonPopUp.Controls.Clear();
             FormDataGridJsonPopUp formJsonTable = new()
@@ -648,7 +681,7 @@ namespace Mario2026
                 jsonData = messageAsJson, // Pass the JSON data to the popup form
                 Dock = DockStyle.Fill // Fill the popup form with the JSON table view                
             };
-            formJsonTable.LoadNotificationJsonData();            
+            formJsonTable.LoadNotificationJsonData();
             formJsonTable.ShowDialog(this); // Show the popup form as a dialog, centered on the main form
         }
 
@@ -663,123 +696,62 @@ namespace Mario2026
             formJsonTable.LoadRegistrationJsonData();
             formJsonTable.ShowDialog(this); // Show the popup form as a dialog, centered on the main form
         }
+
+        async private void ButtonGetUBLDocument_Click(object sender, EventArgs e)
+        {
+            string ademicoUrl = SharedGlobals.AdemicoUrl;
+            string accessToken = SharedGlobals.AdemicoAccessToken;
+            string username = SharedGlobals.AdemicoUsername;
+            string password = SharedGlobals.AdemicoPassword;
+
+            string transmissionId = TextBoxTransmissionId.Text.Trim();
+
+
+            string requestUrl = $"{ademicoUrl}/api/peppol/v1/invoices/{transmissionId}/ubl?accessToken={accessToken}";
+
+            StatusStrip.Text = "Bezig...";
+            try
+            {
+                using HttpClient client = new();
+                var byteArray = Encoding.ASCII.GetBytes($"{username}:{password}");
+                client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+
+                // Accept XML
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
+
+                // Make the GET request
+                HttpResponseMessage response = await client.GetAsync(requestUrl);
+                response.EnsureSuccessStatusCode();
+
+                // Read the content
+                string invoiceXml = await response.Content.ReadAsStringAsync();
+
+                // Save to file
+                string myDocumentsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                // Combine folder path with the filename you want
+                string outputFile = Path.Combine(myDocumentsFolderPath, "invoice.xml");
+
+                // Save to file in My Documents
+                await File.WriteAllTextAsync(outputFile, invoiceXml);
+
+                StatusStrip.Text = "UBL Invoice XML retrieved and saved successfully.";
+
+                MessageBox.Show(
+                    "UBL Invoice XML retrieved and saved successfully.\n\n" +
+                    $"Invoice saved to: {outputFile}",
+                    "Success",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+            }
+            catch (Exception ex)
+            {
+                StatusStrip.Text = "Error: " + ex.Message;                
+            }            
+        }
     }
 }
 
 
-
-
-
-
-
-//using System;
-//using System.Collections.Generic;
-//using System.Windows.Forms;
-//using Newtonsoft.Json;
-
-//namespace JsonToTableWinForms
-//{
-//    public partial class MainForm : Form
-//    {
-//        private Root rootData;
-//        private int currentPage;
-
-//        public MainForm()
-//        {
-//            InitializeComponent();
-//            SetupUI();
-//            LoadJsonData();
-//            ShowPage(0);
-//        }
-
-//        private void SetupUI()
-//        {
-//            // DataGridView
-//            dataGridView1.Dock = DockStyle.Top;
-//            dataGridView1.Height = 300;
-
-//            // Buttons & Label
-//            var panel = new FlowLayoutPanel
-//            {
-//                Dock = DockStyle.Bottom,
-//                Height = 40,
-//                FlowDirection = FlowDirection.LeftToRight
-//            };
-
-//            var btnPrev = new Button { Text = "Previous" };
-//            var btnNext = new Button { Text = "Next" };
-//            lblPageInfo = new Label { AutoSize = true, Padding = new Padding(10, 10, 0, 0) };
-
-//            btnPrev.Click += (s, e) => ShowPage(currentPage - 1);
-//            btnNext.Click += (s, e) => ShowPage(currentPage + 1);
-
-//            panel.Controls.Add(btnPrev);
-//            panel.Controls.Add(btnNext);
-//            panel.Controls.Add(lblPageInfo);
-
-//            Controls.Add(panel);
-//            Controls.Add(dataGridView1);
-//        }
-
-//        private Label lblPageInfo;
-//        private DataGridView dataGridView1 = new DataGridView();
-
-//        private void LoadJsonData()
-//        {
-//            string json = System.IO.File.ReadAllText("data.json");
-//            rootData = JsonConvert.DeserializeObject<Root>(json);
-//        }
-
-//        private void ShowPage(int pageIndex)
-//        {
-//            int pageSize = rootData.Pagination.PageSize;
-//            int totalCount = rootData.Pagination.Count;
-
-//            if (pageIndex < 0 || pageIndex > (totalCount - 1) / pageSize)
-//                return;
-
-//            currentPage = pageIndex;
-//            rootData.Pagination.Page = pageIndex;
-
-//            var pageData = rootData.Notifications
-//                                   .GetRange(pageIndex * pageSize,
-//                                             Math.Min(pageSize, totalCount - pageIndex * pageSize));
-
-//            dataGridView1.DataSource = null;
-//            dataGridView1.DataSource = pageData;
-
-//            lblPageInfo.Text = $"Page {pageIndex + 1} of {Math.Ceiling((double)totalCount / pageSize)}";
-//        }
-//    }
-
-//    public class Root
-//    {
-//        [JsonProperty("pagination")]
-//        public Pagination Pagination { get; set; }
-
-//        [JsonProperty("notifications")]
-//        public List<Notification> Notifications { get; set; }
-//    }
-
-//    public class Pagination
-//    {
-//        public int Count { get; set; }
-//        public int Page { get; set; }
-//        public int PageSize { get; set; }
-//    }
-
-//    public class Notification
-//    {
-//        public string EventType { get; set; }
-//        public int NotificationId { get; set; }
-//        public string TransmissionId { get; set; }
-//        public string SbdhTransmissionId { get; set; }
-//        public DateTime NotificationDate { get; set; }
-//        public string DocumentId { get; set; }
-//        public string PeppolDocumentType { get; set; }
-//        public string DocumentStatus { get; set; }
-//        public string Sender { get; set; }
-//        public string Receiver { get; set; }
-//        public List<object> Details { get; set; }
-//    }
-//}

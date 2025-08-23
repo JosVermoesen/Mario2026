@@ -16,8 +16,7 @@ namespace Mario2026.Properties {
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-        internal bool IsUpgraded;
-
+        
         public static Settings Default {
             get {
                 return defaultInstance;
@@ -74,49 +73,37 @@ namespace Mario2026.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string AdemicoUrl {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool isUpgraded {
             get {
-                return ((string)(this["AdemicoUrl"]));
+                return ((bool)(this["isUpgraded"]));
             }
             set {
-                this["AdemicoUrl"] = value;
+                this["isUpgraded"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsAdmin {
+            get {
+                return ((bool)(this["IsAdmin"]));
+            }
+            set {
+                this["IsAdmin"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string AdemicoAccessToken {
+        public string ClientKbo {
             get {
-                return ((string)(this["AdemicoAccessToken"]));
+                return ((string)(this["ClientKbo"]));
             }
             set {
-                this["AdemicoAccessToken"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string AdemicoUsername {
-            get {
-                return ((string)(this["AdemicoUsername"]));
-            }
-            set {
-                this["AdemicoUsername"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string AdemicoPassword {
-            get {
-                return ((string)(this["AdemicoPassword"]));
-            }
-            set {
-                this["AdemicoPassword"] = value;
+                this["ClientKbo"] = value;
             }
         }
     }

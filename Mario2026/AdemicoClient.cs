@@ -8,6 +8,11 @@ namespace Mario2026
 {
     public static class AdemicoClient
     {
+        static readonly string ademicoUrl = SharedGlobals.AdemicoUrl;
+        static readonly string accessToken = SharedGlobals.AdemicoAccessToken;
+        static readonly string username = SharedGlobals.AdemicoUsername;
+        static readonly string password = SharedGlobals.AdemicoPassword;
+
         public static class PeppolInvoiceSender
         {
             public sealed record ApiResult(HttpStatusCode StatusCode, string? ResponseBody);
@@ -20,11 +25,8 @@ namespace Mario2026
                 bool xC5Reporting = false,
                 CancellationToken cancellationToken = default)
             {
-                string ademicoUrl = Properties.Settings.Default.AdemicoUrl;
-                string accessToken = Properties.Settings.Default.AdemicoAccessToken;
-                string username = Properties.Settings.Default.AdemicoUsername;
-                string password = Properties.Settings.Default.AdemicoPassword;
-                                
+        
+
                 // Prepare target URL with query parameter
                 string requestUri = $"{ademicoUrl.TrimEnd('/')}/api/peppol/v1/invoices/ubl-submissions" +
                                     $"?accessToken={Uri.EscapeDataString(accessToken)}";
@@ -62,12 +64,7 @@ namespace Mario2026
             string transmissionId, string documentId, string eventType, string peppolDocumentType, string sender,
             string receiver, string startDateTime, string endDateTime, string page, string pageSize,
             CancellationToken cancellationToken = default)
-        {
-            string ademicoUrl = Properties.Settings.Default.AdemicoUrl;
-            string accessToken = Properties.Settings.Default.AdemicoAccessToken;
-            string username = Properties.Settings.Default.AdemicoUsername;
-            string password = Properties.Settings.Default.AdemicoPassword;
-                        
+        {                        
             // Helper to URL-encode query parameters safely
             static string Encode(string val) => Uri.EscapeDataString(val ?? string.Empty);
 
@@ -127,11 +124,6 @@ namespace Mario2026
                 string? peppolSupportedDocument, string? legalEntityId,
                 CancellationToken cancellationToken = default)
         {
-            string ademicoUrl = Properties.Settings.Default.AdemicoUrl;
-            string accessToken = Properties.Settings.Default.AdemicoAccessToken;
-            string username = Properties.Settings.Default.AdemicoUsername;
-            string password = Properties.Settings.Default.AdemicoPassword;
-
             var baseUrl = ademicoUrl.EndsWith('/') ? ademicoUrl : ademicoUrl + "/";
 
             // Build encoded query string
@@ -167,11 +159,6 @@ namespace Mario2026
 
         public static async Task<string> CheckConnection(HttpClient client)
         {
-            string ademicoUrl = Properties.Settings.Default.AdemicoUrl;
-            string accessToken = Properties.Settings.Default.AdemicoAccessToken;
-            string username = Properties.Settings.Default.AdemicoUsername;
-            string password = Properties.Settings.Default.AdemicoPassword;
-
             // Compose the full endpoint with query parameter
             string requestUri = $"{ademicoUrl.TrimEnd('/')}/api/peppol/v1/tools/connectivity" +
                                 $"?accessToken={Uri.EscapeDataString(accessToken)}";
@@ -222,13 +209,7 @@ namespace Mario2026
             CreateLegalEntityRequest request,
             CancellationToken cancellationToken = default)
         {
-            // if (request is null) throw new ArgumentNullException(nameof(request));
-
-            string ademicoUrl = Properties.Settings.Default.AdemicoUrl;
-            string accessToken = Properties.Settings.Default.AdemicoAccessToken;
-            string username = Properties.Settings.Default.AdemicoUsername;
-            string password = Properties.Settings.Default.AdemicoPassword;
-
+            // if (request is null) throw new ArgumentNullException(nameof(request));                     
             var baseUrl = ademicoUrl.TrimEnd('/');
             var requestUri = $"{baseUrl}/api/peppol/v1/legal-entities?accessToken={Uri.EscapeDataString(accessToken)}";
 

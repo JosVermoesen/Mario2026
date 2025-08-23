@@ -17,8 +17,7 @@ namespace Mario2026
             ApplicationConfiguration.Initialize();
             // If you want to use the settings, uncomment the following line:
             // Properties.Settings.Default.IsUpgraded = true;
-            Properties.Settings.Default.IsUpgraded = true; // Set to true to indicate settings have been upgraded
-
+            Properties.Settings.Default.Upgrade();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormMario());

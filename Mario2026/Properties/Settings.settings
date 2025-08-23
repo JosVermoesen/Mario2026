@@ -14,16 +14,13 @@
     <Setting Name="MarioMainFormHeight" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="AdemicoUrl" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="isUpgraded" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="AdemicoAccessToken" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="IsAdmin" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="AdemicoUsername" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="AdemicoPassword" Type="System.String" Scope="User">
+    <Setting Name="ClientKbo" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

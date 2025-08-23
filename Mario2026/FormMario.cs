@@ -1,4 +1,7 @@
 ﻿using IDEALSoftware.VpeCommunity;
+using Mario2026.Actions;
+using Mario2026.Ademico;
+using Microsoft.VisualBasic;
 using System.Diagnostics;
 
 namespace Mario2026
@@ -9,7 +12,7 @@ namespace Mario2026
         public FormMario()
         {
             InitializeComponent();
-            Text = "Mario2026";
+            Text = "Vsoft Mario2026";
         }
         private void FormMario_Load(object sender, EventArgs e)
         {
@@ -26,6 +29,7 @@ namespace Mario2026
                 this.Width = Properties.Settings.Default.MarioMainFormWidth;
                 this.Height = Properties.Settings.Default.MarioMainFormHeight;
             }
+
         }
         private void FormMario_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -40,22 +44,6 @@ namespace Mario2026
             Close();
         }
 
-        private void LookUpsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Form lookUpTools = new FormLookUpTools
-            {
-                Owner = this
-            };
-            lookUpTools.ShowDialog();
-        }
-        private void CheckUBLDocumentToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Form checkUBLDocument = new FormUblDocCheckUp
-            {
-                Owner = this
-            };
-            checkUBLDocument.ShowDialog();
-        }
         private void AutoPageBreakTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // =====================================================================
@@ -184,7 +172,7 @@ namespace Mario2026
 
         private void TestingToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form ademicoTesting = new FormApiActions
+            Form ademicoTesting = new FormApiActionsAdmin
             {
                 Owner = this
             };
@@ -198,6 +186,38 @@ namespace Mario2026
                 Owner = this
             };
             settingsForm.ShowDialog();
+        }
+
+        private void PeppolActionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form ademicoClientActions = new FormApiActionsClient
+            {
+                Owner = this
+            };
+            ademicoClientActions.ShowDialog();
+        }
+
+        private void UserSettingsMenuItem_Click(object sender, EventArgs e)
+        {
+            Form userSettingsForm = new FormUserSettings
+            {
+                Owner = this
+            };
+            userSettingsForm.ShowDialog();
+        }
+
+        private void FormMario_Shown(object sender, EventArgs e)
+        {
+            bool isAdmin = Properties.Settings.Default.IsAdmin;
+            PeppolToolStripMenuItem.Visible = isAdmin; // Show or hide the Admin menu based on the IsAdmin setting
+            string value = Interaction.GetSetting(
+                "marINTEGRAAL",       // AppName
+                "marIntegraal",     // Section
+                "Bedrijfsinhoudsopgave2025",
+                "" // Default if not found
+                ) ?? ""; // Ensure null-coalescing operator to handle possible null value.
+
+            SharedGlobals.SetMimDataLocation(value);
         }
     }
 }
